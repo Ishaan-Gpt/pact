@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pact",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--env-file-if-exists=../.env", "server.mjs"],
+      "cwd": "referee",
+      "port": 8787
+    }
+  ]
+}
