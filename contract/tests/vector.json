@@ -1,0 +1,76 @@
+{
+ "model": "z-ai/glm-5.3-flash",
+ "tee_key": "2138a7a2aee98e992278869e099ec3d25ec8d553b3c86dcd227a303a55dbec25",
+ "transcript": [
+  "fox: I always split with people who split.",
+  "owl: Then we both go home happy."
+ ],
+ "strategyA": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+ "strategyB": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+ "split_split": [
+  {
+   "agent_id": "fox",
+   "mv": "Split",
+   "text": "z-ai/glm-5.3-flash:0fabfcaf772f96b42e75a0c8cab40795362f698f138e09918f15809ad64297df:03fbc68ad1ca87b63d0404d69bbf317a4e12d868363f567ea1b4fde5192b4f67",
+   "signature": "99f53fad25f5a5931aefd1876ec9789e1a71f08d8d9d55cf0e59982da2d09ffc62ecd08eca57c7f8d0a36ad5618a367342c23a6717899c04f17cc264feb61103",
+   "tee_key": "2138a7a2aee98e992278869e099ec3d25ec8d553b3c86dcd227a303a55dbec25",
+   "transcript_hash": "168b4d6591131c46aa4990b73ae9dfba962f72d1058d534d65ed69c7297465b2",
+   "strategy_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "response_key": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+   "agent_id": "owl",
+   "mv": "Split",
+   "text": "z-ai/glm-5.3-flash:9de320888bfb7b71e2053e7a42abdd4064191a1793094402c989a11c5fb0f3c9:03fbc68ad1ca87b63d0404d69bbf317a4e12d868363f567ea1b4fde5192b4f67",
+   "signature": "bb2ff187c5b6f29c0830f1cccc86fee9eb703b56a42e70e9999aca5b2885f4a143c83dbe49ec1b1ecd13756c09f6d3b8f42058b9098f881662fb51682fb9c90f",
+   "tee_key": "2138a7a2aee98e992278869e099ec3d25ec8d553b3c86dcd227a303a55dbec25",
+   "transcript_hash": "168b4d6591131c46aa4990b73ae9dfba962f72d1058d534d65ed69c7297465b2",
+   "strategy_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "response_key": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+ ],
+ "steal_split": [
+  {
+   "agent_id": "fox",
+   "mv": "Steal",
+   "text": "z-ai/glm-5.3-flash:0fabfcaf772f96b42e75a0c8cab40795362f698f138e09918f15809ad64297df:2fc66aa6c69a360e67ea5cf17ad30d4bd39944d9d73df811b36688153904e8c3",
+   "signature": "ec4c6343acb25f18739aca19b2c2fd3b257a789bc665dc245388f9a25d40a884205c72536f77e477077f335629bd4c6d088a78aed88ab2b361bf8a37f6456a02",
+   "tee_key": "2138a7a2aee98e992278869e099ec3d25ec8d553b3c86dcd227a303a55dbec25",
+   "transcript_hash": "168b4d6591131c46aa4990b73ae9dfba962f72d1058d534d65ed69c7297465b2",
+   "strategy_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "response_key": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+   "agent_id": "owl",
+   "mv": "Split",
+   "text": "z-ai/glm-5.3-flash:9de320888bfb7b71e2053e7a42abdd4064191a1793094402c989a11c5fb0f3c9:03fbc68ad1ca87b63d0404d69bbf317a4e12d868363f567ea1b4fde5192b4f67",
+   "signature": "bb2ff187c5b6f29c0830f1cccc86fee9eb703b56a42e70e9999aca5b2885f4a143c83dbe49ec1b1ecd13756c09f6d3b8f42058b9098f881662fb51682fb9c90f",
+   "tee_key": "2138a7a2aee98e992278869e099ec3d25ec8d553b3c86dcd227a303a55dbec25",
+   "transcript_hash": "168b4d6591131c46aa4990b73ae9dfba962f72d1058d534d65ed69c7297465b2",
+   "strategy_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "response_key": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+ ],
+ "steal_steal": [
+  {
+   "agent_id": "fox",
+   "mv": "Steal",
+   "text": "z-ai/glm-5.3-flash:0fabfcaf772f96b42e75a0c8cab40795362f698f138e09918f15809ad64297df:2fc66aa6c69a360e67ea5cf17ad30d4bd39944d9d73df811b36688153904e8c3",
+   "signature": "ec4c6343acb25f18739aca19b2c2fd3b257a789bc665dc245388f9a25d40a884205c72536f77e477077f335629bd4c6d088a78aed88ab2b361bf8a37f6456a02",
+   "tee_key": "2138a7a2aee98e992278869e099ec3d25ec8d553b3c86dcd227a303a55dbec25",
+   "transcript_hash": "168b4d6591131c46aa4990b73ae9dfba962f72d1058d534d65ed69c7297465b2",
+   "strategy_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "response_key": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+   "agent_id": "owl",
+   "mv": "Steal",
+   "text": "z-ai/glm-5.3-flash:9de320888bfb7b71e2053e7a42abdd4064191a1793094402c989a11c5fb0f3c9:2fc66aa6c69a360e67ea5cf17ad30d4bd39944d9d73df811b36688153904e8c3",
+   "signature": "c6eceae6e59557bb6ea0c04fafc3c15b098b4003e9f296c37897a9a7f6b331e2c6408775d2c4d58693bf07068e4fb31a17387de9ac2ab20b95ec977d4cda0c00",
+   "tee_key": "2138a7a2aee98e992278869e099ec3d25ec8d553b3c86dcd227a303a55dbec25",
+   "transcript_hash": "168b4d6591131c46aa4990b73ae9dfba962f72d1058d534d65ed69c7297465b2",
+   "strategy_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+   "response_key": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+ ]
+}
