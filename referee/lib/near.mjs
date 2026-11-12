@@ -30,6 +30,16 @@ export async function nearView(method, args = {}) {
   return near().view(cfg.contract, method, args);
 }
 
+/** Sends a function call and returns the method's decoded return value (near-kit returns the raw outcome). */
 export async function nearCall(contract, method, args = {}, opts = {}) {
-  return near().call(contract, method, args, { gas: opts.gas || "300 Tgas", attachedDeposit: opts.deposit || "0 NEAR", signerId: cfg.referee });
+  const res = await near().call(contract, method, args, { gas: opts.gas || "300 Tgas", attachedDeposit: opts.deposit || "0 NEAR", signerId: cfg.referee });
+  const sv = res?.status?.SuccessValue;
+  if (sv === undefined) throw new Error(`${method} failed: ${JSON.stringify(res?.status).slice(0, 300)}`);
+  if (!sv) return null;
+  const txt = Buffer.from(sv, "base64").toString("utf8");
+  try {
+    return JSON.parse(txt);
+  } catch {
+    return txt;
+  }
 }

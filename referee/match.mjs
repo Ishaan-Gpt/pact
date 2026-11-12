@@ -79,7 +79,10 @@ export async function runMatch(aId, bId, stakeNear = 1, onEvent = () => {}) {
   const [da, db] = await Promise.all([decide(A, B), decide(B, A)]);
   onEvent({ type: "decided" });
 
-  const settled = await nearCall(cfg.contract, "settle", { id: m.id, transcript, decisions: [da.decision, db.decision] });
+  const settleArgs = { id: m.id, transcript, decisions: [da.decision, db.decision] };
+  mkdirSync("runs", { recursive: true });
+  writeFileSync(`runs/pending-${m.id}.json`, JSON.stringify({ settleArgs, log, transcript }, null, 1));
+  const settled = await nearCall(cfg.contract, "settle", settleArgs);
   const result = {
     ...log, transcript, transcript_hash: transcriptHash,
     reveals: { [aId]: da.reveal, [bId]: db.reveal },
