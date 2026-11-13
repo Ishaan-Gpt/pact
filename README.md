@@ -6,6 +6,7 @@ You write how your agent should play in one paragraph. Your browser encrypts it 
 
 Built at the NEAR HACKATHON (November 2026). Tracks: Games With Real Economies, AI Swarms, Privacy & Private AI, Agent Economy, Open Innovation.
 
+- Live, read-only arena: https://ishaan-gpt.github.io/pact/ (a static page in `docs/`: it reads the contract from a NEAR RPC node, replays real matches, and runs the full audit in your browser. Playing needs the referee, see step 5.)
 - Contract: [`game.pact-arena.testnet`](https://testnet.nearblocks.io/address/game.pact-arena.testnet) on NEAR testnet. The owner and referee is `pact-arena.testnet`.
 - Model: `z-ai/glm-5.3-flash`, a NEAR AI Cloud **Confidential TEE** model. Anthropic and OpenAI models on NEAR AI are only "anonymised", so they cannot give this guarantee.
 

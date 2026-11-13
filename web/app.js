@@ -1,9 +1,30 @@
-import { Arena } from "/arena.js";
-import { seal, sha256Hex } from "/lib/e2ee.mjs";
+import { Arena } from "./arena.js";
+import { seal, sha256Hex } from "./lib/e2ee.mjs";
+import { view, CONTRACT } from "./chain.js";
 
 const $ = (s) => document.querySelector(s);
-const api = (p, o) => fetch(p, o).then(async (r) => (r.ok ? r.json() : Promise.reject(new Error((await r.json().catch(() => ({}))).error || r.statusText))));
 const toNear = (y) => Number(BigInt(y) / 10n ** 18n) / 1e6;
+
+// With the referee server (local), the page uses its API. Hosted as static files (GitHub Pages), it reads the
+// contract from a NEAR RPC node, the published run files from ./runs, and audits matches in the browser.
+const STATIC = !/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || new URLSearchParams(location.search).has("static");
+const serverApi = (p, o) => fetch(p, o).then(async (r) => (r.ok ? r.json() : Promise.reject(new Error((await r.json().catch(() => ({}))).error || r.statusText))));
+async function staticApi(p, o) {
+  const json = (u) => fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${u}: ${r.status}`))));
+  if (p === "/api/info") {
+    const [, referee, model, keys, jackpot, matches] = await view("info");
+    return { contract: CONTRACT, network: "testnet", referee, model, modelKey: keys.at(-1), keys, jackpot, matches, live: false, static: true };
+  }
+  if (p === "/api/agents") return (await view("agents", { from: 0, limit: 200 })).sort((a, b) => b.elo - a.elo);
+  if (p === "/api/matches") return view("recent_matches", { limit: 200 });
+  if (p === "/api/runs") return json("runs/index.json");
+  if (p === "/api/attestation") return json("runs/attestation-summary.json");
+  if (p.startsWith("/api/match/")) return json(`runs/match-${Number(p.split("/").pop())}.json`);
+  if (p.startsWith("/api/verify/")) return (await import("./verify-browser.js")).verifyMatch(Number(p.split("/").pop()));
+  if (o?.method === "POST") throw new Error("Playing needs the referee, which holds the enclave key and signs settlements. Clone the repo and run `node server.mjs` (README, step 5); every match you see here can still be audited in this tab.");
+  throw new Error(`not available in the hosted view: ${p}`);
+}
+const api = STATIC ? staticApi : serverApi;
 
 // ---------- intro: the stone stamps once per session ----------
 (function intro() {
@@ -95,10 +116,13 @@ function toScript(run, onchain) {
 
 // ---------- replay loop of real matches ----------
 let runs = [], replayIdx = 0, livePlaying = false;
+const FEATURED = [0, 23]; // Shark betrays Mirror; Juniper reads Shark and steals first
 async function replayNext() {
   if (livePlaying || !runs.length) return;
   const pinned = new URLSearchParams(location.search).get("match"); // ?match=ID replays that match first (links and demos)
-  const id = pinned && replayIdx === 0 ? (replayIdx++, pinned === "latest" ? runs[0] : Number(pinned)) : runs[replayIdx++ % runs.length];
+  // first the pinned match (links, demo), then the featured stories, then everything newest first
+  const order = [...(pinned ? [pinned === "latest" ? runs[0] : Number(pinned)] : []), ...FEATURED.filter((f) => runs.includes(f)), ...runs];
+  const id = order[replayIdx++ % order.length];
   try {
     const [run, m] = await Promise.all([api(`/api/match/${id}`), api("/api/matches").then((ms) => ms.find((x) => x.id === id))]);
     arena.play(toScript(run, m), () => setTimeout(replayNext, 900));
@@ -114,6 +138,7 @@ $("#seal").addEventListener("submit", async (ev) => {
   const state = $("#formState");
   state.className = "form-state";
   try {
+    if (info.static) throw new Error("Playing needs the referee, which holds the enclave key and signs settlements. Clone the repo and run node server.mjs (README, step 5). Every match on this page can still be audited right here.");
     if (!info.live) throw new Error("The referee is offline right now. Matches resume shortly.");
     const strategy = String(f.get("strategy")).trim();
     const sealed = seal(`Your owner's strategy: ${strategy}`, info.modelKey);

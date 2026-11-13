@@ -13,7 +13,7 @@ app.use(express.json({ limit: "64kb" }));
 app.use(express.static("../web"));
 app.use("/vendor/noble", express.static("node_modules/@noble"));
 app.use("/demo", express.static("../demo"));
-app.get("/lib/e2ee.mjs", (_q, r) => r.type("text/javascript").sendFile("lib/e2ee.mjs", { root: "." }));
+app.get(["/lib/e2ee.mjs", "/lib/game.mjs"], (q, r) => r.type("text/javascript").sendFile(q.path.slice(1), { root: "." }));
 
 let attestation = null;
 async function freshAttestation() {
