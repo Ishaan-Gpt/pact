@@ -87,7 +87,7 @@ function toScript(run, onchain) {
     moves: run.moves,
     reveals: run.reveals,
     payout: run.payout,
-    sigs: Object.fromEntries((onchain?.decisions || []).map((d) => [d.agent_id, d.text])),
+    sigs: Object.fromEntries((onchain?.proofs || []).slice(2).map((d) => [d.agent_id, d.text])),
   };
 }
 
