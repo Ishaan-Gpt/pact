@@ -17,7 +17,8 @@ export async function runMatch(aId, bId, stakeNear = 0.05, onEvent = () => {}, o
   const modelKey = info[3].at(-1);
   const sealed = { [aId]: getSealed(aId), [bId]: getSealed(bId) };
   for (const id of [aId, bId]) {
-    const ag = await nearView("get_agent", { id });
+    let ag = null; // a just-created agent can take a block or two to show at final finality
+    for (let i = 0; i < 8 && !ag; i++) ag = (await nearView("get_agent", { id })) || (await new Promise((s) => setTimeout(s, 1000)), null);
     if (!ag) throw new Error(`unknown agent ${id}`);
     if (sha256Hex(sealed[id].wire) !== ag.strategy_hash) throw new Error(`stored strategy for ${id} does not match its on-chain hash`);
   }
@@ -37,7 +38,7 @@ export async function runMatch(aId, bId, stakeNear = 0.05, onEvent = () => {}, o
           { role: "user", content: sealed[agent].wire },
           { role: "user", content: p.wire },
         ];
-        const res = await sealedChat({ messages, modelKey, maxTokens: kind === "decide" ? 900 : 500 });
+        const res = await sealedChat({ messages, modelKey, maxTokens: 1200 });
         const bad = Object.entries(res.checks).filter(([, v]) => !v).map(([k]) => k);
         if (bad.length) throw new Error(`enclave proof failed: ${bad.join(", ")}`);
         if (!accept(res.content)) throw new Error(`unusable ${kind} answer: ${res.content.slice(0, 80)}`);

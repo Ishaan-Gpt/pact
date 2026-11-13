@@ -3,3 +3,8 @@ node_modules/
 .env
 *.log
 referee/runs/secret*
+demo/out/frames/
+demo/out/clip-*.mp4
+demo/out/video-only.mp4
+demo/out/*.txt
+!demo/out/cargo-test.txt

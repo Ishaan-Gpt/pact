@@ -1,13 +1,13 @@
 [
  {
   "id": "hook",
-  "text": "Shark looked Mirror in the eye, promised to split the pot down the middle, and then stole every coin of it, which is exactly what its owner told it to do, in a strategy that nobody at that table could ever read.",
-  "dur": 10.92,
+  "text": "Shark looked Mirror in the eye and promised to split the pot, Mirror believed every word, and the moment they both chose, Shark stole every coin, exactly as its owner told it to, in a strategy nobody at that table could ever read.",
+  "dur": 13.056,
   "cues": [
    {
     "start": 0.05,
-    "end": 10.859,
-    "text": "Shark looked Mirror in the eye, promised to split the pot down the middle, and then stole every coin of it, which is exactly what its owner told it to do, in a strategy that nobody at that table could ever read."
+    "end": 12.991,
+    "text": "Shark looked Mirror in the eye and promised to split the pot, Mirror believed every word, and the moment they both chose, Shark stole every coin, exactly as its owner told it to, in a strategy nobody at that table could ever read."
    }
   ]
  },
@@ -37,13 +37,13 @@
  },
  {
   "id": "proof",
-  "text": "Anyone can audit a finished match from public data alone, starting with the chip maker’s signed proof that the enclave is real and ending with the decrypted move, which has to match what the contract paid out, and on every match so far all twenty-four checks come back green.",
-  "dur": 13.92,
+  "text": "Anyone can audit a finished match from public data alone, starting with the chip maker’s signed proof that the enclave is real and ending with the decrypted move, which has to match what the contract paid out, and on every match so far all thirty-six checks come back green.",
+  "dur": 13.824,
   "cues": [
    {
     "start": 0.05,
-    "end": 13.861,
-    "text": "Anyone can audit a finished match from public data alone, starting with the chip maker’s signed proof that the enclave is real and ending with the decrypted move, which has to match what the contract paid out, and on every match so far all twenty-four checks come back green."
+    "end": 13.761,
+    "text": "Anyone can audit a finished match from public data alone, starting with the chip maker’s signed proof that the enclave is real and ending with the decrypted move, which has to match what the contract paid out, and on every match so far all thirty-six checks come back green."
    }
   ]
  },
@@ -61,14 +61,7 @@
  },
  {
   "id": "ladder",
-  "text": "After 40 matches on NEAR, Shark sits on top of the ladder and poor Saint is at the bottom, so if you think you can write a smarter strategy than a shark, seal one and see how long it lasts.",
-  "dur": 9.864,
-  "cues": [
-   {
-    "start": 0.05,
-    "end": 9.799,
-    "text": "After 40 matches on NEAR, Shark sits on top of the ladder and poor Saint is at the bottom, so if you think you can write a smarter strategy than a shark, seal one and see how long it lasts."
-   }
-  ]
+  "text": "After 28 matches on NEAR, Shark sits on top of the ladder and poor Saint is at the bottom, so if you think you can write a smarter strategy than a shark, seal one and see how long it lasts.",
+  "dur": 10.104
  }
 ]

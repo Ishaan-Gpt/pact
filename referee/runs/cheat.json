@@ -1,0 +1,12 @@
+{
+ "at": "2026-11-13T15:42:32.813Z",
+ "match": 19,
+ "lines": [
+  "$ node cheat.mjs shark gambler",
+  "playing a real match in the enclave, then settling it three ways…",
+  "✗ forged answer for gambler (referee writes its own STEAL): REFUSED by the contract: \"gambler decision: response bytes do not match the signed hash (edited after signing)\"",
+  "✗ doctored prompt for shark (tell it the other side is lying): REFUSED by the contract: \"shark decision: request bytes do not match the signed hash\"",
+  "✓ honest settlement: accepted",
+  "match 19 settled: shark Steal, gambler Steal"
+ ]
+}

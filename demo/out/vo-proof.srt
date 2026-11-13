@@ -1,4 +1,4 @@
 1
-00:00:00,050 --> 00:00:13,861
-Anyone can audit a finished match from public data alone, starting with the chip maker’s signed proof that the enclave is real and ending with the decrypted move, which has to match what the contract paid out, and on every match so far all twenty-four checks come back green.
+00:00:00,050 --> 00:00:13,761
+Anyone can audit a finished match from public data alone, starting with the chip maker’s signed proof that the enclave is real and ending with the decrypted move, which has to match what the contract paid out, and on every match so far all thirty-six checks come back green.
 

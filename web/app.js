@@ -60,8 +60,9 @@ async function loadInfo() {
 }
 
 async function loadAgents() {
-  const agents = await api("/api/agents");
-  agentsById = Object.fromEntries(agents.map((a) => [a.id, a]));
+  const all = await api("/api/agents");
+  agentsById = Object.fromEntries(all.map((a) => [a.id, a]));
+  const agents = all.filter((a) => a.played > 0); // the ladder shows agents that have played
   $("#agents").innerHTML = agents
     .map((a) => {
       const n = Math.max(1, a.played);

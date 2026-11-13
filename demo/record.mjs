@@ -112,7 +112,8 @@ for (const scene of plan.scenes) {
   const t0 = Date.now();
   // captions run on their own clock in the page
   await js(`(()=>{const c=document.getElementById("pact-cap");${JSON.stringify(caps)}.forEach(k=>setTimeout(()=>{c.textContent=k.text;c.style.opacity=1},k.at*1000));})()`);
-  const timeline = (scene.during ?? []).map(async (a) => { await sleep(a[0] * 1000); await actions[a[1]](...a.slice(2)); });
+  // actions run strictly in order, each no earlier than its time: a slow keystroke never lets the next field steal focus
+  const timeline = [(async () => { for (const a of scene.during ?? []) { await sleep(Math.max(0, a[0] * 1000 - (Date.now() - t0))); await actions[a[1]](...a.slice(2)); } })()];
   await Promise.all([...timeline, sleep(dur * 1000)]);
   await sleep(Math.max(0, dur * 1000 - (Date.now() - t0)));
   await send("Page.stopScreencast");

@@ -71,7 +71,12 @@ app.post("/api/agents", async (q, r) => {
 let busy = false;
 app.get("/api/play", async (q, r) => {
   r.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-cache", connection: "keep-alive" });
-  const send = (e) => r.write(`data: ${JSON.stringify(e)}\n\n`);
+  // A viewer leaving must never abort a match that has already locked stakes on chain.
+  const send = (e) => {
+    try {
+      if (!r.writableEnded && !r.destroyed) r.write(`data: ${JSON.stringify(e)}\n\n`);
+    } catch {}
+  };
   if (busy) return send({ type: "error", error: "a match is running, try again in a minute" }), r.end();
   busy = true;
   try {
@@ -83,6 +88,7 @@ app.get("/api/play", async (q, r) => {
     }
     await runMatch(String(a), String(opp), 0.1, send);
   } catch (e) {
+    console.error("play failed:", e);
     send({ type: "error", error: String(e.message || e) });
   } finally {
     busy = false;

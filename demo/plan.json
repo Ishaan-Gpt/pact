@@ -2,7 +2,7 @@
  "scenes": [
   {
    "id": "hook",
-   "url": "/?match=0&focus=1&speed=2.01",
+   "url": "/?match=0&focus=1&speed=1.19",
    "load": 800,
    "before": [
     [
@@ -18,7 +18,7 @@
     [
      0,
      "eval",
-     "pactArena.start = performance.now()"
+     "pactArena.start = performance.now() - 6.6 * 1000 / pactArena.speed"
     ]
    ]
   },
@@ -34,18 +34,18 @@
    ],
    "during": [
     [
-     0.5,
+     0.4,
      "type",
      "input[name=name]",
-     "Velvet",
-     16
+     "Juniper",
+     18
     ],
     [
-     1.2,
+     1,
      "type",
      "input[name=id]",
-     "velvet",
-     16
+     "juniper",
+     18
     ],
     [
      2,
@@ -63,7 +63,7 @@
   },
   {
    "id": "match",
-   "url": "/?match=latest&focus=1&speed=1.6",
+   "url": "/?match=23&focus=1&speed=1.7",
    "load": 800,
    "before": [
     [
@@ -89,15 +89,28 @@
    "load": 2600,
    "before": [
     [
+     "waitFor",
+     "document.querySelectorAll(\"#checks li\").length > 10"
+    ],
+    [
      "jump",
      "#proof"
     ],
     [
      "wait",
-     1200
+     600
+    ],
+    [
+     "jump",
+     "#proof"
     ]
    ],
    "during": [
+    [
+     0,
+     "jump",
+     "#proof"
+    ],
     [
      3,
      "glide",

@@ -7,11 +7,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/style.css" />
 <style>
-  body { display: grid; place-items: center; min-height: 100vh; margin: 0; background: var(--paper); }
+  body { display: grid; justify-items: center; align-content: start; padding-top: 34px; min-height: 100vh; margin: 0; background: var(--paper); }
   .term { width: min(1120px, 92vw); border-radius: 22px; background: var(--p-900); color: var(--c-200); padding: 1.1rem 1.6rem 1.6rem;
-    box-shadow: 0 40px 80px -50px var(--p-900); font: 400 15px/1.75 var(--mono); min-height: 520px; }
-  .bar { display: flex; gap: .45rem; margin-bottom: 1rem; }
-  .bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--p-700); }
+    box-shadow: 0 40px 80px -50px var(--p-900); font: 400 14px/1.6 var(--mono); }
+  .tbar { display: flex; gap: .45rem; margin-bottom: 1rem; }
+  .tbar i { width: 11px; height: 11px; border-radius: 50%; background: var(--p-700); }
   .l { white-space: pre-wrap; opacity: 0; transform: translateY(4px); transition: opacity .35s var(--ease-out), transform .35s var(--ease-out); }
   .l.in { opacity: 1; transform: none; }
   .cmd { color: var(--c-50); } .no { color: var(--r-300); } .ok { color: var(--c-300); } .dim { color: var(--p-300); }
@@ -19,7 +19,7 @@
 </style>
 </head>
 <body>
-<div class="term"><div class="bar"><i></i><i></i><i></i></div><div id="out"></div></div>
+<div class="term"><div class="tbar"><i></i><i></i><i></i></div><div id="out"></div></div>
 <script type="module">
   const data = await fetch("/demo/out/term.json").then((r) => r.json());
   const step = Number(new URLSearchParams(location.search).get("step")) || 420;
@@ -27,7 +27,7 @@
   data.lines.forEach((t, i) => {
     const d = document.createElement("div");
     if (!t) { d.className = "gap"; out.append(d); return; }
-    d.className = "l " + (t.startsWith("$") ? "cmd" : t.includes("REFUSED") ? "no" : /accepted|ok\b|passed|settled|refunded/.test(t) ? "ok" : "dim");
+    d.className = "l " + (t.startsWith("$") ? "cmd" : t.includes("REFUSED") ? "no" : /accepted|ok\b|passed|settled|refunded/i.test(t) ? "ok" : "dim");
     d.textContent = t;
     out.append(d);
     setTimeout(() => d.classList.add("in"), 300 + i * step);

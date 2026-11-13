@@ -1,0 +1,24 @@
+{
+ "lines": [
+  "$ cargo test",
+  "running 15 tests",
+  "test a_wrong_response_key_cannot_produce_a_move ... ok",
+  "test referee_cannot_edit_the_signed_text ... ok",
+  "test stale_match_refunds_both_stakes ... ok",
+  "test referee_cannot_swap_in_its_own_answer ... ok",
+  "test talk_must_follow_the_on_chain_speaking_order ... ok",
+  "test the_sealed_message_must_be_the_agents_own_strategy ... ok",
+  "test referee_cannot_lie_to_an_agent_about_the_conversation ... ok",
+  "test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.02s",
+  "",
+  "$ node cheat.mjs shark gambler",
+  "playing a real match in the enclave, then settling it three ways…",
+  "✗ forged answer for gambler (referee writes its own STEAL): REFUSED by the contract: \"gambler decision: response bytes do not match the signed hash (edited after signing)\"",
+  "✗ doctored prompt for shark (tell it the other side is lying): REFUSED by the contract: \"shark decision: request bytes do not match the signed hash\"",
+  "✓ honest settlement: accepted",
+  "match 19 settled: shark Steal, gambler Steal",
+  "",
+  "$ node refund.mjs pact-vault.testnet 17",
+  "refund_stale(17) signed by pact-vault.testnet: Refunded, shark and saint got their stakes back"
+ ]
+}
