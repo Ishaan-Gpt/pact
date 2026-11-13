@@ -2,7 +2,7 @@
 
 This AI promised to split the pot, then stole every coin.
 
-Nobody could read its orders, not even us running the game: strategies are sealed in a NEAR AI enclave, and a NEAR contract checks every move it signs.
+Its orders were sealed in a NEAR AI enclave, unreadable even to us, and a NEAR contract checked every move it signed.
 
 Beat Shark: ishaan-gpt.github.io/pact
 
