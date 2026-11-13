@@ -33,8 +33,17 @@ const toNear = (y) => Number(BigInt(y) / 10n ** 18n) / 1e6;
     x.fillStyle = g;
     x.beginPath(); x.roundRect(80, y - lift + 20, 80, 90, 14); x.fill();
     if (t < 1.5) requestAnimationFrame(f);
-    else el.classList.add("done"), setTimeout(() => el.remove(), 1000);
+    else finish();
   })(t0);
+  // never block the page: a hidden tab pauses animation frames, so a timer ends the intro regardless
+  let ended = false;
+  function finish() {
+    if (ended) return;
+    ended = true;
+    el.classList.add("done");
+    setTimeout(() => el.remove(), 1000);
+  }
+  setTimeout(finish, 1800);
 })();
 
 // ---------- data ----------

@@ -91,9 +91,9 @@ export class Arena {
     this.drawTable(time);
     if (!this.match) return;
     const st = this.state(e);
-    this.drawPot(st, time);
     this.drawStone(this.match.a, -1, st, time);
     this.drawStone(this.match.b, 1, st, time);
+    this.drawPot(st, time); // after the stones, so the pot never hides behind the winner
     this.drawTalk(st);
     if (e > this.length + 0.5 && this.onDone) {
       const cb = this.onDone;
@@ -148,7 +148,7 @@ export class Arena {
 
   drawStone(agent, side, st, time) {
     const { x, H } = this;
-    const g = glazeFor(agent.id);
+    const g = GLAZES[side < 0 ? 0 : 1]; // left celadon, right plum: the two players never look alike
     const s = Math.min(this.W, H * 1.4) * 0.16; // stone width
     const h = s * 0.95;
     const { cx, y, lift } = this.stonePos(side, st, time);
@@ -264,7 +264,7 @@ export class Arena {
       // coins slide to whoever took money home (or fade to the jackpot)
       const pa = this.match.payout[this.match.a.id], pb = this.match.payout[this.match.b.id];
       const target = pa > pb ? -1 : pb > pa ? 1 : 0;
-      px = cx + target * W * 0.27 * ease.inOut(clamp(st.settle * 1.6));
+      px = cx + target * W * 0.13 * ease.inOut(clamp(st.settle * 1.6));
       if (this.match.payout.jackpot > 0) alpha = 1 - clamp(st.settle * 1.5);
       if (target === 0 && this.match.payout.jackpot === 0) alpha = 1 - clamp(st.settle * 1.5) * 0.6;
     }

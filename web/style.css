@@ -19,7 +19,7 @@ html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
 a { color: inherit; }
 h1, h2 { font-family: var(--display); font-weight: 400; letter-spacing: -0.01em; margin: 0; }
-h1 { font-size: clamp(2.3rem, 4.6vw, 4.4rem); line-height: 1.02; }
+h1 { font-size: clamp(2.2rem, 4vw, 3.9rem); line-height: 1.03; text-wrap: balance; }
 h1 em { font-style: normal; color: var(--c-700); }
 h2 { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.05; }
 .sub, .lede { color: var(--ink-soft); max-width: 36rem; }
@@ -39,7 +39,7 @@ html.seen .intro { display: none; }
 .chrome nav a:hover::after { transform: scaleX(1); transform-origin: left; }
 .net { font: 500 .72rem var(--mono); color: var(--c-700); border: 1px solid var(--c-300); border-radius: 99px; padding: .2rem .6rem; }
 
-.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: center; padding-top: clamp(2rem, 5vw, 4rem); min-height: calc(100vh - 60px); }
+.hero { display: grid; grid-template-columns: minmax(0, 11fr) minmax(0, 12fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: center; padding-top: clamp(2rem, 5vw, 4rem); min-height: calc(100vh - 60px); }
 .lede { margin: 1.5rem 0 2rem; font-size: 1.08rem; }
 .cta, .stamp-btn { display: inline-flex; align-items: center; gap: .6rem; font: 600 1rem var(--body); color: var(--c-50); background: var(--ink); border: 0; border-radius: 14px; padding: 1rem 1.5rem; text-decoration: none; cursor: pointer;
   box-shadow: 0 1px 0 var(--p-500) inset, 0 10px 24px -14px var(--p-900); transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out); }
@@ -93,6 +93,7 @@ input:focus, textarea:focus { outline: none; border-color: var(--c-600); box-sha
 
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; min-height: 0; }
+  .arena-wrap { aspect-ratio: 4 / 5; }
   .rules ol { grid-template-columns: 1fr; }
   .row { grid-template-columns: 1fr; }
   .chrome nav { display: none; }
