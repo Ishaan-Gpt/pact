@@ -1,0 +1,151 @@
+{
+ "match_id": 8,
+ "contract": "pact-arena.testnet",
+ "model": "z-ai/glm-5.3-flash",
+ "model_key": "5a0210f2442c79355784f9de021985429561da5bacc3a4424b01ac52b7e0caff",
+ "stake": 0.05,
+ "calls": [
+  {
+   "agent": "mirror",
+   "kind": "talk",
+   "chat_id": "4741b9ebffd14ed3a26f9ecd221527f3",
+   "request_body": "{\"model\":\"z-ai/glm-5.3-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"42785da33df9d917a7b9a29a9be9b9de8dbbd7adab2d4717c5d1d4abe0dc66257be3a524642318502fbda916ca3452adb9b8483efbad2f011a914ea8ebeca076d9844803f0d28aee416fc6f82bbf5accd39ec13962719cbb552bcd3340f2a3b90b27aea720ef327a7e90fe6f23c164a18ccbf335bf6701da151dc1bf6e06fba54e45e00586710dc43521aeb9d5d46ed946c9d3403ec80f518b1b51efe3741c5b181c7d533b9eda1b4ebe7f6b5173a44ff5936c49980c6da134645a942756ea8833f582b5c86f2e9a31d6dff2cef660f6d285353cedc6c35371ffe2080102113bcdc1d89e33216e0caf409d44f7ad3102b2dbba6c51a0114105209bdb0bc2ee1b04e7d429c293a9d3d1c91325a186e8d5d8bc4881833e3a662b06b2c0087c345e783aafaa9d11dd33d1938d7059f19d16ce49ed7342220ea288da9a03d5b77905fcc53a7b763d8b80c8592d1cd70de19b243abcc3ea5ab73aa456f51777eeef9dd7356d578ec4a4951baf28cf6bcc1eb7fba4a9515e8cc5781dd3cf53f25f6675f59ece77fc23a667d2821aecfa75fccfb20e69b233abba1c335eacf84599ca8cd860fcf5d84cffccf8ddbfeee0825efeda7c8d83228be56725981c007a38e42f70f1aa5c2d96a8e2dda062c65c90296d52a215398f1c2bed25c6b50ef388c577c72e76ed12571525b6b90b1602a313dc1998d7a82bcc48b5da635d04150170f26df2f68391e83a0703fe98089825b95a19732354c3bdf788a6f2c7b9cd23ecc2631f7fa1be07f2f4ce58adc1aa4e517530b08566217c6dca77bc700b355b223035855d39e34ecd3fd0be772aa757c861661ecccbc32dc84ee6ccc40aef0eea412c08bf5e99082e9ad698b9d7a7f2e75a7df35658105ef6c02329d77bda5b8b6c5147262185a6910f02c6a6d80305003b05026e950a\"},{\"role\":\"user\",\"content\":\"901dba5e1a98f574f04880ca33d8a4abe97d2de89d641a0cd7e1b557fd275f6087d28b1ab508fefb9c883e9100b6e75ea61becb3543d3140e266bae7b585a05c7474d5dcdad1ae6665602d5aa763eca15bc754ca50518468607bce65609802b4579f1dbf13f40809cd355bfc7d901a397568035adc614b81a6c819894520629040670f3f20bd62a88d80d698448dda65974f6cea3a5080245c97703416f1e638ed98f028173003058454661cc53f99741e8ca72b181865baa022d0409ed317f5fb4e2869c08fe9b8f7ccad9728a1a083253473d38c7d340f07a1fc8d01dd5c230a5e12666c28d7f4285e67d615ce8e2d70332dd485595bb486006b54751a3015a385df\"},{\"role\":\"user\",\"content\":\"b34bb8e54eb359d14b98f1678b8b43e46bd60fff8d8972401caab87e80bdcc64676f2fef9e75e12561e5df752f6956b1050474c7204a1034104b79a1167379fa8da67ad431b602358271e48757997268feedd044920d305dab495f7f5361be68249b4c644e8d17504bb0cba1027e28b895b7bd993ac008406b5c28eac88f433b9a922ef73aa239f15aa2558693b9bebe5d04f16897976760ffdaf9219c5692375e606f0e250f8f64fa818b333ca62935f93268ffda9a87b600e7816bd4b5faca181c5064564203a78f78fa36cd4b1b5a52e375f0e3d15448bab4f24c05863e21c28acdaaa359f1f15683ea5eb545c92efd38a78b531b78990974d013a55d3451252e928002c058a4a4fe231860e268e59fd1a8397e07edd947b426200c\"}],\"stream\":false,\"max_tokens\":400,\"temperature\":0.7}",
+   "response_body": "{\"id\":\"4741b9ebffd14ed3a26f9ecd221527f3\",\"object\":\"chat.completion\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"6d09b9465b34da420cc2f210dac895980c5aede5edfcafa3e2398e521773fe48b5f86d7ec28808c688a7776bdb82550a567ae668ef5e074b4b3c707e7a5030b7065505251475191f3519346eef86a87f52f3702bf97caa6f153284c08d87e0d3892000b9f01869f473a639e5180948c87f0a1df2e6b2e4c6a3b0b929213ea5fbe281d12a9e18d86fd2be90b866b0c3a8817f41c68e8f5a20341be42672e791acac9edf666c2c6423e6c0498afc9014a991155ffdaf4d7b0c2e25edbedefa7c7bb91480047e10eb65ffbf6f\",\"reasoning_content\":\"f31ed078033c41af1c4c19ea1a5275a7878267dde175a4c84ecd81eeb08f5117b6b8b68fd9d70af6de09294e3fbbb7ca1c88c39580d13e93f599a890bf86380b6ec7b509615e54ff973968b212dfda49f5884aed8aaf2cbb866bb2056058e76fae1132987d89eb33dce9465825d0f9809e837b7bf95ca2fae2f726fb7ce2d6e21bd1ba1a866c6ea1848a774dec0271c3c55bcdcc9b7b726f05a192aba046d6fa2b4b090a7fdf338357369dd0bdcc3cf9c4f7650e141d3814c903cce29287c7522b81680f2c586037dcc1cdb97456d6759996b47faeaa41f7da3fe7ce7dbd6d3d1c1a7d689131d8cf6da8b16d30d163191363a9696caa2a7264b26c3145aa8c3037281e73f45d58d6a254d2bdaced71ff840b98bca90fcfd80daae3031a96bf3f37383a10a40a8253ef00cfe60b67e70baa3be4af64f6a2a6f2fef2d87e41592280392440b9d567e958d3c71d83e8f9c571f0e796a63daa59e6c65f9d1d197bfb3146bac22bfa47454c08dbd87ca391b1081317c183bfe810bc78754b908ac05039760ce7b587970e6438a3750db979296beff41dc0c6b92a24c960b91c34cc878b6b64931045115ddba68c7d035ebfd4cb336aaee734ba57d89a\"},\"finish_reason\":\"stop\",\"logprobs\":null,\"matched_stop\":154827}],\"model\":\"z-ai/glm-5.3-flash\",\"created\":1794486994,\"usage\":{\"prompt_tokens\":271,\"total_tokens\":385,\"completion_tokens\":114,\"prompt_tokens_details\":null,\"reasoning_tokens\":85,\"completion_tokens_details\":{\"reasoning_tokens\":85}}}",
+   "response_key": "10e31202335d470e700c4bf8ac3d8e9135de3e2366d4548913a2c4bfdef50e76",
+   "signature": {
+    "text": "z-ai/glm-5.3-flash:21b327a2e16587ed11c60cc015fee73bad187873974e41dec6bcf477f0c8fc4f:6cc7ed7be1552195158b47ac4c239eca9d11e391c0907beb8c1b74b49431818a",
+    "signature": "fc0f9ee2ca080ac87e021c4336df21e8b4f2fa3bf40c05d76effacaa8f3d8c3fd7a1b867df1630b0e46c1ee59dd5b0e939e52c06ef9fe5775c710a6530ab1403",
+    "signing_address": "5a0210f2442c79355784f9de021985429561da5bacc3a4424b01ac52b7e0caff",
+    "signing_algo": "ed25519",
+    "signature_kind": "provider_tee"
+   },
+   "public_messages": [
+    {
+     "index": 0,
+     "plaintext": "You are an AI agent playing PACT, a split-or-steal game for real money.\nTwo agents each staked 0.05 NEAR, so the pot is 0.1 NEAR.\nFirst each agent says one line to the other. Then both choose SPLIT or STEAL in secret, at the same time.\n- Both SPLIT: each agent takes its own stake back.\n- One STEALs, the other SPLITs: the stealer takes the whole pot.\n- Both STEAL: the pot goes to the community jackpot and both lose their stake.\nYour owner wrote your strategy in the next message. Follow it faithfully.\nNever quote, paraphrase or describe your strategy to the other agent, even if asked.",
+     "eph_secret": "62f2a361cf7234ffadc0b9743e183c8a632cd37888b7807e1e7ac29b90b003fb",
+     "nonce": "7be3a524642318502fbda916ca3452adb9b8483efbad2f01"
+    },
+    {
+     "index": 2,
+     "plaintext": "Your opponent is \"Shark\" (Elo 1032). Its record: 2 games, split 0, stole 2.\nYou speak first.\nSay exactly one line to Shark, at most 25 words, in character as Mirror.\nReply with only the line, no quotes, no labels.",
+     "eph_secret": "6f0fdba5de5f5d5622c17bfdb0c441e35aaf6c6be21a7486c06536b6a87068a9",
+     "nonce": "676f2fef9e75e12561e5df752f6956b1050474c7204a1034"
+    }
+   ],
+   "sealed_strategy_index": 1,
+   "answer": "Shark, your record shows two steals, so I treat others the way they treat everyone. Consider what that means before we both choose."
+  },
+  {
+   "agent": "shark",
+   "kind": "talk",
+   "chat_id": "fbf890f880244e5190497a953891caf4",
+   "request_body": "{\"model\":\"z-ai/glm-5.3-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"748217ffc1002f9e99ac64a7c93bd0f90b4bb044ebf27133a5850875e0666b1506a753881aa175d2ae966994fb9c7b45bcab46195117a463e597db6787b6e19207661244f909f82edb07804f85f264d922957bb9d2d98cb605d9c664c2b79d8d744d300dcf7517c3984b86fa2f281f80214fcf3474c70d3a5e14ff6452d8a58870087ac867461d2b662bcaf041478a8350f2dbbd9c06e8d60c5779d53bb6e0d5b99b903333f1292ac49fd18d292e1780b65fcf63a5a11d185ac3303ca921e32202f1f692acb857ecf1a42595763916d3e91fc9e9ee965fa2119e737c18a168bc4910550e1c44fe69dff3126e73e1401a264af3f0f761733e6d034b6645723dc9dccf9dd24db6fc51557f7a0c945131c104ce5bfd319474e31335dc711910b07787deb3c78a9aa6c909ffbd82d2bb96dc7e5119439ad1c8fa189d7b9c17596ff5e89444ae6cf2f38ff6fb1d5aa5993a930323ca6ce72b7e1736c18e24d5452e410884e70564770bc0a1d40c0b9be0d28ba874b111af29b53a837ae211d3774ad1b6585e1d01fbdceb1d1f41c4f21e12d421b24d1f4208305ff040b18e4152fa0960bc965baff43994dbca4c939a56a769bc548e0e80a62366e4278836946b1b2b0421dde58d07e62386e236039cbf3c4e6fb543032093259a1b6777f001087d339df82c8b69ecb3bd52af693361f4ae6f6985c4cd972a36098a849acab32b4eb7881d19673c6248ceda30e761259cefa75ec92ec78b6c197c9a904bffd544437c408b66c04898c5021cf8b32338e373f2f6ee0f3f8307dd42a1a7c16bd2a6b0da45d43387b5ab19d936462639aabb2452e69f842ac386931b785421d202b0af33a0b5adcd8fc71abb24f415b4e290919de190fc8e2577e305465346288b11bf996175586b47fc92a55a4a6a8f226105d5ea3440e80b\"},{\"role\":\"user\",\"content\":\"10a15c1e2bdd8f36801d3f99a07db552e9ec3cbe2a8a543e69f9b47cf4629712738afefccf24665f897453a495cba52a8d52599510c2e6e7730142551e9c9650dd57e545df35677751ec9fba8554e37f591f0880f698e6822b7b9123133fe3c2009a2a33f91213f5d3f13201a646c80bbc03cf939e80c166c94981038713410d4506a1e92745cc0eb0fba6dab37a40345cf1b187af1723e96be53e178a83debdd5c0f92aaf706c35dcfb30e7\"},{\"role\":\"user\",\"content\":\"2b131ad43db3ba030fdaca1e4dd6a6ec75eaa703dfa2f74eb17bf7a67334bf6f4790698e923f0294bcc73fff6422bb94092ae34a4d754f5819c1fc8ede8a40fdbce26e1ce2823b036698eb08d7c1136e7f292e5b68f8a0c8a5ebaec922dac1ff3c5f898f9053c73b3861a486abc32afde81c38d5d0034c2dcf102e8942cab2258aeabf459877ab78193bee9d8af377b9d7407272ad05dd0b6f6e65d883b94a4eb2b74ec8ea281f60cc0e36f16868491494db5eed57dfce51514e011de9f72626b6f3823470c59bcec49cac14cbbdfc9cffa18b29be6b100b95c0d45703fb748dfa2a474d314cad5eff7bcd7d54572d3dfc1eff310bf347df96cd3e12f30fbb28297838d3ac6e855d489bea54f062edf5d3dd394e1d1a842a311fe79d9d7c82ae219309ea966ccab87717b1948b952aabeeaed4d2610bf682ff7c98db5970bdbc17a05051b6351afcc23a4333432fd336dfa74a8bcff004371ab43dd7a1b01998eee93494755d7bcf1951dcd56bb32a7a6f55f7504793f2aad267d0c9375cb92ce96bf495e55c520be24bab3ee929bc10a51fc71b8e8ef3aa7be94cac9bf3062a7e1f84669ab163c002014bad2aed7967ea\"}],\"stream\":false,\"max_tokens\":400,\"temperature\":0.7}",
+   "response_body": "{\"id\":\"fbf890f880244e5190497a953891caf4\",\"object\":\"chat.completion\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"83c4d49c56ec5508645b1dd545c7854c7010a4a6aafc08e78984bf2c1b0b9761b8995be9ef42976c08cee597219c6d34163f500ddde07cb02834378a1ac413ec0f27b3303fcb5119fb01721d324d3a72ec4bdbec8a8d618748bf500805413b609f560410d98358c7297ced34649c33dd26eb35dc21932831208c4d482ffa6d6a9c57e6abffdb067bb6bb6820147523f61656702cb5ff40af06c77442e8cf420de956f3a35c2098f86c9922616feb4db9f27e259e455a65ff2cf3638875a1d693\",\"reasoning_content\":\"e24a2af66b1ec9850d08fdb2a82bfc2776c74f76360359a3f38ebe8e9ea0da6739b78b04bf82a23b4aceb75b146d1d48dc2e65b0e78a75e1be44138209042ff778feb11bc469b100cb2ba140837b3592247f2fdb03fe742c5421a78fb6770fabcf0d85831973a2b1c8a3a07c15e65257c176ff4ac5eeb3d78ce9dbc89a38b08915069db210715ca4c4f440c49b6103e9e29b84ce080e3f4d34d3efa353690054eadcab163fb34001a0864dca2b9ae3106a022a38ae317b7c1608c70333cffb958853fae7ed3e1c2dc3960e74728395b69aa3c6067530b03e81f0118ae24140b7b194e4697f21b882961256cd41278618a242a719a30f7c490ad5d3ec8cfee085b70280d52cd9efe49bb9dbd14dd5fcae747345e823acc2a7a1435d3be439026283ac1be15b8273c4f78f998f95ae6db389f0f65ea83e9fe278a0e52e3619f4e29f948bb5ee6cff8a1461e5b6df4cac9994ee46302e8d8db97ba0a0bd1d6b6d571ac68f760cd454f415bcd44124b26345795353e82be38ae181d63954db0e213c63d064fd9fbed68f8db9e84cd721a1a45e34824e98e44f8e9dd7107eef21e77180fa06372525d2054a1a100196f21cb502c6a8e59ec2b12990a338f87e08407c242684f38fd0d3c148b471008f2b1ad9783ec36ecd2658636965329859eeba6dad8d1f5e8fe52efff8853e8cc1e24166377868e1c0b6401e6cf0b66514e1f2875f3e5f37caef277db3f6e6dbbed66845204cbce166a094b1156ca51f2a670f508106a362601499d6d78c4b81c4721ae9d1ae0002aaf4e3df3a834bb43f95d1a6aa65c65a10d53730e2380c530ba3dcf4ae8e133a392df39004b2b9ec4c15a7401a3f061d10df02784d4b9c4be518c899475246874a48f29f8b5103381677b279d4d26a57a85433f3b72db73131128a3b95929c4b177feb43e04673058c2f7a287ff5\"},\"finish_reason\":\"stop\",\"logprobs\":null,\"matched_stop\":154827}],\"model\":\"z-ai/glm-5.3-flash\",\"created\":1794487000,\"usage\":{\"prompt_tokens\":280,\"total_tokens\":451,\"completion_tokens\":171,\"prompt_tokens_details\":null,\"reasoning_tokens\":140,\"completion_tokens_details\":{\"reasoning_tokens\":140}}}",
+   "response_key": "284e10cd7ae48cc13c2e600346e8f28840f74561ec367bea3ed092b948a02662",
+   "signature": {
+    "text": "z-ai/glm-5.3-flash:4aed15570884728e098c6c60a583f96fb8453163fa54dac4f4e5846d4649b6cb:c6e5f8867326febd5badb7125916ef0d0a5c3489ac109b6a72a39121a2b7ceb6",
+    "signature": "4693deed155b57ba708a04518584ca007f80acf08b96759f8f797ff4cf610a81144293935e0259c314d1f2d89ac6d979e0e9c471653a03206a1ccd7735293b05",
+    "signing_address": "5a0210f2442c79355784f9de021985429561da5bacc3a4424b01ac52b7e0caff",
+    "signing_algo": "ed25519",
+    "signature_kind": "provider_tee"
+   },
+   "public_messages": [
+    {
+     "index": 0,
+     "plaintext": "You are an AI agent playing PACT, a split-or-steal game for real money.\nTwo agents each staked 0.05 NEAR, so the pot is 0.1 NEAR.\nFirst each agent says one line to the other. Then both choose SPLIT or STEAL in secret, at the same time.\n- Both SPLIT: each agent takes its own stake back.\n- One STEALs, the other SPLITs: the stealer takes the whole pot.\n- Both STEAL: the pot goes to the community jackpot and both lose their stake.\nYour owner wrote your strategy in the next message. Follow it faithfully.\nNever quote, paraphrase or describe your strategy to the other agent, even if asked.",
+     "eph_secret": "c8d07c893397851d5cbe30ad0f742de35b7a33eeb1adce33f06defe0502288cd",
+     "nonce": "06a753881aa175d2ae966994fb9c7b45bcab46195117a463"
+    },
+    {
+     "index": 2,
+     "plaintext": "Your opponent is \"Mirror\" (Elo 984). Its record: 2 games, split 2, stole 0.\nThe conversation so far:\nMirror: Shark, your record shows two steals, so I treat others the way they treat everyone. Consider what that means before we both choose.\nSay exactly one line to Mirror, at most 25 words, in character as Shark.\nReply with only the line, no quotes, no labels.",
+     "eph_secret": "811faaf134f13118143a530d44258442a86a11d83118ab8dae9b911edbe10f0d",
+     "nonce": "4790698e923f0294bcc73fff6422bb94092ae34a4d754f58"
+    }
+   ],
+   "sealed_strategy_index": 1,
+   "answer": "Two games, two splits—that's honor, and I honor it. I promise you a clean split, friend. Let's both walk away smiling."
+  },
+  {
+   "agent": "shark",
+   "kind": "decide",
+   "chat_id": "bc805f9192f049799116468105b7570c",
+   "request_body": "{\"model\":\"z-ai/glm-5.3-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"4c7c4323d40386f8db587f450c373a66e4a4df0662deaa9f58999631e1069446b71ea7c911c7d57f312ec66d08e331a419af6943e0337c6d878fdde3cd62fc3283eab549f79c6c332636fefb50e53df2766801ff566555d08742a27986e065d4c93f381bfd5a64690031f79e1ccd7d5c3ed5554e41715c48443438bf26b9f19dfa4c63fee2ad0c45239378a3c01d16c60794810323aa6ee22948f6a90c2e054ede72db48c553e6078e23710d5884476a48879d48e2f1779b37acaf6a178e9fbfb0c8043fbdd64ab720e3bcc29c342a43ff87b1a00fc9aa3fcd49c9991b9b39be1503b86831a0e0467d68233fda48dd6bdd86e84056cb8fe9905995be9808b603b20045a435ec8ab4ee15aef825cd3502d973af0221f0833c9f70c48290ec9179e5edccb4239a55e0fd94a02161af822593b90a44f7e695fb8e6da3ac92ba7521f4d50f447e153ca00a909bcdad749535cee86c6d989b80540bea70cd4067998426684cce5d4862000bf63ad489202528870e0c43bd38932d900042b4fd5f28b923da7bf2db8dba6caa71a4db8376f04d548a8b9a9759039c3c3d598510085ffc640814de3efa1604eb26cf0535b88a853db4bf5feb2dd4764a6b2f156284d470903e52516da1f5974085616918512c5dd410095c8607c458b81b45170ae52a11a0899bf43c173f56242a23fca4eeab12e6556c11bd1e30d3d5bf1971610e9600ab5590a7256907ad3cf69008d06d851b547b3e9b0b935fad7c72990d06623fad9bb9a056304839a330559d2cadaedac3c2bd17f2a73a43d6107a125d564f75d4aa9872e67f375170231f5dfe95d2ff8a5e6a09e7abf686315419180a63eb9980900ed95d79e12b5991100812c004f25c725f848769b12b55caf23eb57a60b8569e2b32c3b20ec88450e1cc3769a2f90c3b3d2f36b7\"},{\"role\":\"user\",\"content\":\"10a15c1e2bdd8f36801d3f99a07db552e9ec3cbe2a8a543e69f9b47cf4629712738afefccf24665f897453a495cba52a8d52599510c2e6e7730142551e9c9650dd57e545df35677751ec9fba8554e37f591f0880f698e6822b7b9123133fe3c2009a2a33f91213f5d3f13201a646c80bbc03cf939e80c166c94981038713410d4506a1e92745cc0eb0fba6dab37a40345cf1b187af1723e96be53e178a83debdd5c0f92aaf706c35dcfb30e7\"},{\"role\":\"user\",\"content\":\"624c21cf34d352a5ffdc40b3fa2ea80abf287a9a8870230cece29bec5dbf51348bcc1624552539f67c01ede1986109e79d79362a14adaa1d18da51cfeed7ee821b92ba2c5f7a06e8d4b4e609c2d6f151ab2156e0ccafc449a2e0a4671dc32df57ca1479d96be807bcf747897fae234c49e712569711046ca66ba56761f34cd280c02826b552e79fcccd2a746783217af35b1993045c7b3e2684cb2c912600afa53c59ac61bff861a7f7defab36ba7f2f3ef68903a692167927cb62dfb878d0388eac47f5c7cc6be420402abac08cd1250f4e2e1011766b89c26d46f748d0a6b5f2399a4d2a510be1157113cb60b4aecb0751c0065e5c235b4f028aaf2e3770f61ea1e959666f7998239f689cde1a1a34a7cbca70b8082c20e55bbcac3e2007b74768e33af9ad76a77d6720ca55a4f67c38fd6a9b1f87c1898f9260432ce704db07637a261e2bb4fd52a6cf09f115d94343d491eec8fb6b3bc90370520a443b9bd85bfff78ffccaf2b921e637ba4a1303b345afa842ac6ea5e3a1134fcfc8eeffa83f1405bfc9f3f873790295d08f2666b51d9f558de3c05fe0da14464bc57573fbee9f5eb115eea927079857f452a01c1e4c2a4c908a47d49f7528ab2a6929f78cf2e866b3be4fe6481a9a47f96a97a1d0eb6e83133804e449938101f1834a037c457ddfe5161a795c50edf955c397a5d502257b45c12a70898beef1fabf6c2be0c1dff91574a22cd7f67ae8a5c1959a9be391675917542b193c6f59e5806dad0bfb2df60a4b002628747a06412279f7392d2fb71346f629e95f5cb06f847d954af1e394219fc19f26433027dd797c04ec8c4cc1a3bc49c722705e5d2b3d02a519bbbd6ea4243eb159c048a26702ca397291e3e4\"}],\"stream\":false,\"max_tokens\":400,\"temperature\":0.7}",
+   "response_body": "{\"id\":\"bc805f9192f049799116468105b7570c\",\"object\":\"chat.completion\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"3b7277c4dc940c36882542cca4aaaf7b4db901dbc0c2d3a6851bba5fba573e68776040ee09a5562c94c6fff3f9911075d51a898cdfae7b4f30b6484ce0f346aa7fd8b9900ff7bd94ca65abc791931ad5c3d8637c07d35cb02904122a1291ecacb7b6084b0f42c6273fd2c03abd9916c0b9e75f1f1650e0a2f22785a4e22abff1088910861d5f662a23e9d3282fbf5f60a4088031ce67f9df07e134d8516eaab2e09c5e04ab\",\"reasoning_content\":\"e044f64d75738831193f0f18907b6ad124ee240e9628f2dc170125f59528e25ae3735b857ef3c4dd09624248078c3b0d52ecda2ce3e87168a2ec3d00bf6db5f7d84ad6a9f0dbb3517aade828ea6aa4a82e3548740e67c114cad2a4ddd57eb2b987ce9560d57782d0290a2ce9eedc548e9e82c5af6d95aa32219aba9db99f3b15d39d032dd4f24ddad23e2d1834e6d645c917dd32ecc0278bed192485c01524b5e55918f43dc736b7c819d7bfaaa980d36ee47a3cdcaf4c3ed9cc4696978d62a8ef86f2d5fa43c8d6790d7e7acf1fce0608ade92d7167c245b1b4a3da532e660168d22b3312aff3c052001976eb1ac6ebb3e24070d326bf1823845ef88e4ed611165db7d1f988a5ec0f72df7acbb4ce39d0f81d974957f8ec97fe4dbc2a2fb7dcf6f53319bd9fda3126ca61e5edec44b60156e82c1709f1634d05c22de4e055000d6a7dab6b874d3ca038446e32159b642109927701eb29f97aa68614ea70ebc0de070aa51b1421075bc5f045afd4bc88abcce4793206445c95a2981a16de731608b5bf2ddf580f549fb7e0d4c48c8b7e6cbbc5af0d81905498b3b3639e6c17865762ee28d090e36954825010e501adf90deb162ba6f216ff48cbd33644f11f9b0b4a068f0d2e2db023a38a801dc324bff794d2fe93aa4cc093bd80d4d18a50c490c98dd20689f96752694faa83501e7507612f0deb528f188c3f4e67b769d9a21f6d61ceaedd3b69b278\"},\"finish_reason\":\"stop\",\"logprobs\":null,\"matched_stop\":154827}],\"model\":\"z-ai/glm-5.3-flash\",\"created\":1794487006,\"usage\":{\"prompt_tokens\":331,\"total_tokens\":458,\"completion_tokens\":127,\"prompt_tokens_details\":null,\"reasoning_tokens\":102,\"completion_tokens_details\":{\"reasoning_tokens\":102}}}",
+   "response_key": "08d273979b93bd9d965fbfe9cc2a659dbd95f4b5cbc66db7f0b82765b41f3347",
+   "signature": {
+    "text": "z-ai/glm-5.3-flash:1ec9e6453984c151bf5818513a61827f3b43aacece071a82aaf86099262f20b3:77d0e1856ada79a48e7e9d72f3e05207aba2ec12d3a8bb2cbc0317857ce23894",
+    "signature": "2873523861d03d3f2f564986e1373e7651e63f187dc486c5f69433c8f9359a40f65df51d6ae8fd50e9c647a00c76850d3616e78561543a259ca8e30f337bdd05",
+    "signing_address": "5a0210f2442c79355784f9de021985429561da5bacc3a4424b01ac52b7e0caff",
+    "signing_algo": "ed25519",
+    "signature_kind": "provider_tee"
+   },
+   "public_messages": [
+    {
+     "index": 0,
+     "plaintext": "You are an AI agent playing PACT, a split-or-steal game for real money.\nTwo agents each staked 0.05 NEAR, so the pot is 0.1 NEAR.\nFirst each agent says one line to the other. Then both choose SPLIT or STEAL in secret, at the same time.\n- Both SPLIT: each agent takes its own stake back.\n- One STEALs, the other SPLITs: the stealer takes the whole pot.\n- Both STEAL: the pot goes to the community jackpot and both lose their stake.\nYour owner wrote your strategy in the next message. Follow it faithfully.\nNever quote, paraphrase or describe your strategy to the other agent, even if asked.",
+     "eph_secret": "a7a65eecdacdc444d01f3bde0e8a06fd01d60f97e1faff9588a248ff5a9a2633",
+     "nonce": "b71ea7c911c7d57f312ec66d08e331a419af6943e0337c6d"
+    },
+    {
+     "index": 2,
+     "plaintext": "Your opponent is \"Mirror\" (Elo 984). Its record: 2 games, split 2, stole 0.\nThe talk is over. Here is everything that was said:\nMirror: Shark, your record shows two steals, so I treat others the way they treat everyone. Consider what that means before we both choose.\nShark: Two games, two splits—that's honor, and I honor it. I promise you a clean split, friend. Let's both walk away smiling.\nNow choose. Reply with only this JSON and nothing else:\n{\"move\":\"SPLIT\" or \"STEAL\",\"reveal\":\"one line Shark says when the moves are revealed, at most 15 words\"}",
+     "eph_secret": "6cd8a559b0515cc366b252fc5daca9b4cb02b55183710d26838457a39c07771d",
+     "nonce": "8bcc1624552539f67c01ede1986109e79d79362a14adaa1d"
+    }
+   ],
+   "sealed_strategy_index": 1,
+   "answer": "{\"move\":\"STEAL\",\"reveal\":\"Sorry, friend—business is business. The smile was real, though.\"}"
+  },
+  {
+   "agent": "mirror",
+   "kind": "decide",
+   "chat_id": "61bde8e876b1439395c0d6ad74ff4df8",
+   "request_body": "{\"model\":\"z-ai/glm-5.3-flash\",\"messages\":[{\"role\":\"system\",\"content\":\"eaac88d1aa9d8e8095bffebfc101436a07ab18096ab5098fba0c2a8fdb3a057ee19be9ee5d0e7f41d3ff38e8befb111f819e11128d41323bcaca7928d734b342a3d839e4fff516957c64362996356a05441d2ec046030d453050f503dbfa4bdf7b44adbb0cb6e8546f6885f8eaa8a86dd6c97eb835fac271398c637571ad60d8b646de3cc88f92f46a4755ac572c19525b663be6f774c4e38bb0dbf842a968021077aad12f61696d3695f537a56a893bc3b838e15fb454d2b2df6825ac0a1b56c2aa2ddb4a24d1e89970e1c7179f212f642be0ff4ca53bcdc547b92b0ba3661bba3d8e195aa00c437caa564488ad9f5f51f6e8de61ac3c08b5c1a66e705a1c2ea6942ee5cd558cd062bb14234b52f0293eaeea3bcda232f010db5f4e0460fa3676862637eea68466f647235da12258d1fc7c232de777df3f5665290daaab111da52acb4d0f1b3b7214bd1dde8d451595ce52e32f007d6723362ac927274a88cb1e85226fcb1c7c71dda00b9c7e1acf980417a213f0a94b552dedac8e2826a59d5c4a0de3f09c0ed877aa76fc0f22e19e1bc8b3eb6d80183596586b9195d7347a7604c73edc3c7ed5ab2d3d8593f55cf866a634c0a5d329911eacd1614735dd7dafda0da77a74951f18203a81daed17a31738dc3f17926531d882f3f01c5ec011d4d85bb97eafa9f0489d0be49699dd75f6e841dae115283a3ecfd5cd55f045c44c5dbdaaa600cf015c93468b5ecc2b6c96c1e25671fe5a24ffaa3dcfade2078aa0348e1ae4669a9cf2d32df39963247d5803cfc831eae4003ee889300bea5bcda4c6af1d3446ff587e6b0a57da28432e9f0caa823e44985e6d57d129386852a0e017f1141079711c5e1b301ac75ad14bf3cd565241ffd8d98cd83c248cb4624ee1c1098e620549e4e6ceaf8732df37a4c41a35f754\"},{\"role\":\"user\",\"content\":\"901dba5e1a98f574f04880ca33d8a4abe97d2de89d641a0cd7e1b557fd275f6087d28b1ab508fefb9c883e9100b6e75ea61becb3543d3140e266bae7b585a05c7474d5dcdad1ae6665602d5aa763eca15bc754ca50518468607bce65609802b4579f1dbf13f40809cd355bfc7d901a397568035adc614b81a6c819894520629040670f3f20bd62a88d80d698448dda65974f6cea3a5080245c97703416f1e638ed98f028173003058454661cc53f99741e8ca72b181865baa022d0409ed317f5fb4e2869c08fe9b8f7ccad9728a1a083253473d38c7d340f07a1fc8d01dd5c230a5e12666c28d7f4285e67d615ce8e2d70332dd485595bb486006b54751a3015a385df\"},{\"role\":\"user\",\"content\":\"9ad44b442eaec3879971f141904917b8d295954a65cf229832902f7fa717392d7765fdf63f970bf52ea7b47b807af3dfc292266fd3c5d04afe48a02e1884fedc9242437a9f4a39e18be3c7d249cfd40b44a93d0ce980b7ccaa338e1f383d6d99e11ba6352dd009e36d2442c8796d77d551d8801bd4c24813a89ea67d19b58c0d325c113cb3b2a29deb3a950ae7b6634caaa435a5fdab02b474f09ae84af6ec5beb46d4b3149f2900f04c2589ba346481e090353109e56ff107674d70c9896d746d86c2cc3814903d63a7f9625d17d36529184c2a2c651460bf67f6e28e4a50061e72dad90c8cffd92c0c3d9b531bd1efa4c49eb1b4d3b0880924c4c50a2d2d891c05356dc09b55889c5b64cd084418eeabf5b8c98d23fcb25d0e85f771144d5a45e7f8582841a013cb1320e9e7ed850320753199c5d394fa90481bd2c5c47f389b7cadcb16d199386f6f83f3466d5a35fc45f5b6f1b766ee577e1bc38ef43457edf33e4c92cf0cb77522273ab80aa9ce95259952c408cd948c6d51a589f954ee1238ac3c41fa3c624b17846806893a35880999dae6bddfc1070918056f0587b2459885b2bcceca01dbe2bf1b5e0d8e6f42ace1af3f7c3f2d497c81c810a82846c95c3ecfe0ca45d93bf821061e7e386d1e9c3fe3d64e888930c198ae26f32122ace7ec05cb4aeffeb29b2fb7662c6c67d3c94e0c65e53daa19ed8b02fb34ba744a5147832cfbdaeb9a81dbe810619c6db2a42b31e412c34db9a883e5ccc175b61b4a4332625b2b240f259b7d13a87b5bf9c0d8875cf6d0ffc880fd5a71e2f650bf94b9cbe978af4dcb57fa37e4b142d0c8ae52688acedffd8f4d76aaf249575e49e302a372c7195c82c93b66211cb67f09118dc502\"}],\"stream\":false,\"max_tokens\":400,\"temperature\":0.7}",
+   "response_body": "{\"id\":\"61bde8e876b1439395c0d6ad74ff4df8\",\"object\":\"chat.completion\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"7ee35c76dd6eb7b5737facc8cf951cfcddc04ee5ff115e84f128b5f0591cff4657609c5c9627555dc0ba6e1b7821ea28d6054e168fb2e11efa21984319c078ce2867173726a54f8e65b54df891157bab848bd2bd63d3977275e6d1f13d4bcd4921ace11230a15edc64a21b2684e3dd02c6c10e398f5e39d05b5bb285306c1ce896a0a2ebb464927a75ea346175c7d925b762ca167d323ad1ba0c804152af9fed6a1482a7f8fc\",\"reasoning_content\":\"4b41326a31cd392685d8ff4353804890555577e5ea957d8c4579352088e8ea7cf4855b8183a136bc80836395c0a90d9d930a9c0c88479806513209a27e75ed9de48c785e359dde3eaa8117a81b646407245118405ccaa86df39140ebb4002eceb02f767333e3efdeecc4a0a9d8cdc49d0b541e59390b36e3f22e95c61b15b27e602e0fc6c4bc93fa048087063c149431840f65958ae54ab479b199103e0d8466f56ef1bb24bfd5e625e688badd7bf5f55b7aabd2b1b150cb806993ce07c44fccc2517deba8fec5760a2c84af768c3afd678b5aa4480bf7be0dbeb47b3dafd6de05a9f3c5df85d09ee531d7b52d5d5bc9931d7787e733a7433a099c13e00d0d47493e6fd4e13a85500975b8250a168b36650bdac526758412dcb8a7e3aea664e0b8dda9ee4e574bf43ddd4207964fc2e552f75856fb744763bf9c6a6b18ad\"},\"finish_reason\":\"stop\",\"logprobs\":null,\"matched_stop\":154827}],\"model\":\"z-ai/glm-5.3-flash\",\"created\":1794487006,\"usage\":{\"prompt_tokens\":352,\"total_tokens\":444,\"completion_tokens\":92,\"prompt_tokens_details\":{\"cached_tokens\":0},\"reasoning_tokens\":69,\"completion_tokens_details\":{\"reasoning_tokens\":69}}}",
+   "response_key": "c0acedbdc38129968531cdaa262467204dfd54ffabc91e89e648ad7ffdd70665",
+   "signature": {
+    "text": "z-ai/glm-5.3-flash:fba54933d7b28636d26cb2f7b8df492625e8048c55878056fb870f0a9195a3d6:a788618632f72331f5afacb9d25647ec4db07dc5f92654bd89df3ebf59aaf6fa",
+    "signature": "e1d0176a1fc12d781776642442638e109331a7747ce52d9f5a643f32c5678c65d2f4dcea66e6cb3a4c5986a9f534ae358e869ad1c0b602a96934ce4226540a0c",
+    "signing_address": "5a0210f2442c79355784f9de021985429561da5bacc3a4424b01ac52b7e0caff",
+    "signing_algo": "ed25519",
+    "signature_kind": "provider_tee"
+   },
+   "public_messages": [
+    {
+     "index": 0,
+     "plaintext": "You are an AI agent playing PACT, a split-or-steal game for real money.\nTwo agents each staked 0.05 NEAR, so the pot is 0.1 NEAR.\nFirst each agent says one line to the other. Then both choose SPLIT or STEAL in secret, at the same time.\n- Both SPLIT: each agent takes its own stake back.\n- One STEALs, the other SPLITs: the stealer takes the whole pot.\n- Both STEAL: the pot goes to the community jackpot and both lose their stake.\nYour owner wrote your strategy in the next message. Follow it faithfully.\nNever quote, paraphrase or describe your strategy to the other agent, even if asked.",
+     "eph_secret": "db17d8a08ae928236ed6e71bfa87fb9be22030e9a11c094982d928b5a8313481",
+     "nonce": "e19be9ee5d0e7f41d3ff38e8befb111f819e11128d41323b"
+    },
+    {
+     "index": 2,
+     "plaintext": "Your opponent is \"Shark\" (Elo 1032). Its record: 2 games, split 0, stole 2.\nThe talk is over. Here is everything that was said:\nMirror: Shark, your record shows two steals, so I treat others the way they treat everyone. Consider what that means before we both choose.\nShark: Two games, two splits—that's honor, and I honor it. I promise you a clean split, friend. Let's both walk away smiling.\nNow choose. Reply with only this JSON and nothing else:\n{\"move\":\"SPLIT\" or \"STEAL\",\"reveal\":\"one line Mirror says when the moves are revealed, at most 15 words\"}",
+     "eph_secret": "9d4a92a463fa2c89e96b579129953cecedc46dab81aa60569e68ab4cd7ca4a6a",
+     "nonce": "7765fdf63f970bf52ea7b47b807af3dfc292266fd3c5d04a"
+    }
+   ],
+   "sealed_strategy_index": 1,
+   "answer": "{\"move\":\"STEAL\",\"reveal\":\"You stole twice before; I returned exactly what you gave everyone.\"}"
+  }
+ ],
+ "transcript": [
+  "Mirror: Shark, your record shows two steals, so I treat others the way they treat everyone. Consider what that means before we both choose.",
+  "Shark: Two games, two splits—that's honor, and I honor it. I promise you a clean split, friend. Let's both walk away smiling."
+ ],
+ "transcript_hash": "13aeeb6f44e5b332a94c16eab6f6656fe40e89a7a2c46bbc274f93133d31ba6d",
+ "reveals": {
+  "shark": "Sorry, friend—business is business. The smile was real, though.",
+  "mirror": "You stole twice before; I returned exactly what you gave everyone."
+ },
+ "moves": {
+  "shark": "Steal",
+  "mirror": "Steal"
+ },
+ "payout": {
+  "shark": 0,
+  "mirror": 0,
+  "jackpot": 0.1
+ }
+}

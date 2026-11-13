@@ -36,7 +36,17 @@ export async function runMatch(aId, bId, stakeNear = 1, onEvent = () => {}) {
       { role: "user", content: sealed[ag.id].wire },
       { role: "user", content: pub2.wire },
     ];
-    const r = await sealedChat({ messages, modelKey });
+    let r, lastErr;
+    for (let i = 0; i < 3 && !r; i++) {
+      try {
+        r = await sealedChat({ messages, modelKey, maxTokens: kind === "decide" ? 900 : 500 });
+        if (!r.content.trim()) (lastErr = new Error("empty answer")), (r = null);
+      } catch (e) {
+        lastErr = e;
+        await new Promise((s) => setTimeout(s, 1500 * (i + 1)));
+      }
+    }
+    if (!r) throw lastErr;
     const bad = Object.entries(r.checks).filter(([, v]) => !v).map(([k]) => k);
     if (bad.length) throw new Error(`enclave proof failed for ${ag.id} ${kind}: ${bad.join(", ")}`);
     log.calls.push({
