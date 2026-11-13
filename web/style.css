@@ -104,3 +104,8 @@ input:focus, textarea:focus { outline: none; border-color: var(--c-600); box-sha
   * { transition-duration: .01ms !important; animation-duration: .01ms !important; scroll-behavior: auto !important; }
   .intro { display: none; }
 }
+
+/* ?focus=1: the arena alone, for the demo film */
+body.focus .hero { grid-template-columns: 1fr; min-height: 0; padding-top: 1rem; padding-bottom: 0; }
+body.focus .hero-copy, body.focus .rules { display: none; }
+body.focus .arena-wrap { width: min(100%, 1040px); margin: 0 auto 2.2rem; aspect-ratio: 16 / 8.6; }

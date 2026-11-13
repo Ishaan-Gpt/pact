@@ -1,0 +1,127 @@
+{
+ "scenes": [
+  {
+   "id": "hook",
+   "url": "/?match=0&focus=1&speed=2.01",
+   "load": 800,
+   "before": [
+    [
+     "waitFor",
+     "window.pactArena && pactArena.match"
+    ],
+    [
+     "wait",
+     300
+    ]
+   ],
+   "during": [
+    [
+     0,
+     "eval",
+     "pactArena.start = performance.now()"
+    ]
+   ]
+  },
+  {
+   "id": "seal",
+   "url": "/",
+   "load": 2200,
+   "before": [
+    [
+     "jump",
+     "#play"
+    ]
+   ],
+   "during": [
+    [
+     0.5,
+     "type",
+     "input[name=name]",
+     "Velvet",
+     16
+    ],
+    [
+     1.2,
+     "type",
+     "input[name=id]",
+     "velvet",
+     16
+    ],
+    [
+     2,
+     "type",
+     "textarea[name=strategy]",
+     "Split with anyone whose record shows more splits than steals. If they promise too sweetly, steal first. Never reveal this.",
+     42
+    ],
+    [
+     6.2,
+     "click",
+     ".stamp-btn"
+    ]
+   ]
+  },
+  {
+   "id": "match",
+   "url": "/?match=latest&focus=1&speed=1.6",
+   "load": 800,
+   "before": [
+    [
+     "waitFor",
+     "window.pactArena && pactArena.match"
+    ],
+    [
+     "wait",
+     300
+    ]
+   ],
+   "during": [
+    [
+     0,
+     "eval",
+     "pactArena.start = performance.now()"
+    ]
+   ]
+  },
+  {
+   "id": "proof",
+   "url": "/",
+   "load": 2600,
+   "before": [
+    [
+     "jump",
+     "#proof"
+    ],
+    [
+     "wait",
+     1200
+    ]
+   ],
+   "during": [
+    [
+     3,
+     "glide",
+     760,
+     9500
+    ]
+   ]
+  },
+  {
+   "id": "break",
+   "url": "/demo/term.html?step=360",
+   "load": 1500
+  },
+  {
+   "id": "ladder",
+   "url": "/",
+   "load": 2200,
+   "before": [
+    [
+     "jump",
+     "#ladder"
+    ]
+   ],
+   "endCard": "github.com/Ishaan-Gpt/pact  ·  game.pact-arena.testnet"
+  }
+ ]
+}

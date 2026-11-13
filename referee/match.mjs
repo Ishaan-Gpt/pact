@@ -12,7 +12,7 @@ import { getSealed } from "./lib/store.mjs";
 const yocto = (near) => (BigInt(Math.round(Number(near) * 1e6)) * 10n ** 18n).toString();
 const toNear = (y) => Number(BigInt(y) / 10n ** 18n) / 1e6;
 
-export async function runMatch(aId, bId, stakeNear = 0.05, onEvent = () => {}) {
+export async function runMatch(aId, bId, stakeNear = 0.05, onEvent = () => {}, opts = {}) {
   const info = await nearView("info");
   const modelKey = info[3].at(-1);
   const sealed = { [aId]: getSealed(aId), [bId]: getSealed(bId) };
@@ -76,6 +76,7 @@ export async function runMatch(aId, bId, stakeNear = 0.05, onEvent = () => {}) {
   const settleArgs = { id: m.id, talk, decisions: [da.answer, db.answer] };
   mkdirSync("runs", { recursive: true });
   writeFileSync(`runs/pending-${m.id}.json`, JSON.stringify(settleArgs));
+  if (opts.settle === false) return { settleArgs, modelKey, moves: { [m.a]: parseDecision(da.content).mv, [m.b]: parseDecision(db.content).mv } };
   const settled = await nearCall(cfg.contract, "settle", settleArgs, { gas: "300 Tgas" });
   const settleGas = lastGas.tgas;
 

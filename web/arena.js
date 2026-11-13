@@ -25,6 +25,7 @@ export class Arena {
     this.script = null;
     this.onDone = null;
     this.visible = true;
+    this.speed = Number(new URLSearchParams(location.search).get("speed")) || 1; // demo recording pace
     new ResizeObserver(() => this.resize()).observe(canvas);
     new IntersectionObserver(([e]) => (this.visible = e.isIntersecting)).observe(canvas);
     this.resize();
@@ -64,7 +65,7 @@ export class Arena {
 
   /** Live matches grow: append a talk line or the result while playing. */
   extend(match) {
-    const elapsed = (performance.now() - this.start) / 1000;
+    const elapsed = ((performance.now() - this.start) / 1000) * this.speed;
     this.match = match;
     const done = this.beats.filter((b) => b.kind !== "wait");
     let t = Math.max(elapsed, done.length ? done.at(-1).at + done.at(-1).dur : 0.6);
@@ -85,7 +86,7 @@ export class Arena {
     requestAnimationFrame((t) => this.frame(t));
     if (!this.visible || !this.W) return;
     const time = (now - this.t0) / 1000;
-    const e = this.match ? (now - this.start) / 1000 : 0;
+    const e = this.match ? ((now - this.start) / 1000) * this.speed : 0;
     const x = this.x;
     x.clearRect(0, 0, this.W, this.H);
     this.drawTable(time);

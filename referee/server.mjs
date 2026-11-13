@@ -12,6 +12,7 @@ const app = express();
 app.use(express.json({ limit: "64kb" }));
 app.use(express.static("../web"));
 app.use("/vendor/noble", express.static("node_modules/@noble"));
+app.use("/demo", express.static("../demo"));
 app.get("/lib/e2ee.mjs", (_q, r) => r.type("text/javascript").sendFile("lib/e2ee.mjs", { root: "." }));
 
 let attestation = null;

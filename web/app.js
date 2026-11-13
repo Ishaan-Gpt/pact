@@ -48,6 +48,7 @@ const toNear = (y) => Number(BigInt(y) / 10n ** 18n) / 1e6;
 
 // ---------- data ----------
 let info, agentsById = {};
+if (new URLSearchParams(location.search).has("focus")) document.body.classList.add("focus");
 const arena = new Arena($("#arena"), $("#caption"));
 window.pactArena = arena; // for debugging in the console
 
@@ -96,7 +97,7 @@ let runs = [], replayIdx = 0, livePlaying = false;
 async function replayNext() {
   if (livePlaying || !runs.length) return;
   const pinned = new URLSearchParams(location.search).get("match"); // ?match=ID replays that match first (links and demos)
-  const id = pinned && replayIdx === 0 ? (replayIdx++, Number(pinned)) : runs[replayIdx++ % runs.length];
+  const id = pinned && replayIdx === 0 ? (replayIdx++, pinned === "latest" ? runs[0] : Number(pinned)) : runs[replayIdx++ % runs.length];
   try {
     const [run, m] = await Promise.all([api(`/api/match/${id}`), api("/api/matches").then((ms) => ms.find((x) => x.id === id))]);
     arena.play(toScript(run, m), () => setTimeout(replayNext, 900));
