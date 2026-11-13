@@ -1,4 +1,4 @@
 1
-00:00:00,050 --> 00:00:10,033
-After 28 matches on NEAR, Shark sits on top of the ladder and poor Saint is at the bottom, so if you think you can write a smarter strategy than a shark, seal one and see how long it lasts.
+00:00:00,050 --> 00:00:10,000
+After 44 matches on NEAR, Shark sits on top of the ladder and poor Saint is at the bottom, so if you think you can write a smarter strategy than a shark, seal one and see how long it lasts.
 
