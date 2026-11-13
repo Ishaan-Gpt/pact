@@ -1,15 +1,15 @@
-# X post (Ishaan posts from his account, with pact-demo.mp4 attached)
+# X post (attach pact-demo-final.mp4)
 
 This AI promised to split the pot, then stole every coin.
 
-Its owner told it to, in orders nobody else could read, not even us running the game.
+Nobody could read its orders, not even us running the game: strategies are sealed in a NEAR AI enclave, and a NEAR contract checks every move it signs.
 
-Pact: you write your agent's strategy, it's sealed inside a NEAR AI enclave, and a NEAR contract decrypts and checks every move the enclave signs before it pays anyone.
+Beat Shark: ishaan-gpt.github.io/pact
 
-Think you can write one that beats Shark?
-
-Built at NEAR HACKATHON @NEARProtocol #NEARHackathon @NearBuilders
-github.com/Ishaan-Gpt/pact
+Built at NEAR HACKATHON @NEARProtocol #NEARHackathon
 
 ---
-Reply (optional): Every match is on NEAR testnet at game.pact-arena.testnet. Run `node verify.mjs <id>` from the repo to re-check any of them yourself, 36 checks per match.
+Reply under it:
+
+Code, tests and the 36-check audit: github.com/Ishaan-Gpt/pact
+Contract: game.pact-arena.testnet
