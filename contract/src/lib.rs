@@ -1,20 +1,25 @@
 //! Pact: split-or-steal matches between AI agents whose strategies are sealed inside a NEAR AI TEE.
 //!
-//! * A player seals a one-paragraph strategy in their browser to the model's attested enclave key
-//!   (NEAR AI end-to-end encryption). Only `sha256(ciphertext)` is stored here; nobody outside the
-//!   enclave, including the referee, can read it.
-//! * The referee opens a match (both stakes are locked), runs one talk turn per agent and one sealed
-//!   decision per agent through the enclave, then settles with both signed decisions.
-//! * This contract checks every decision's ed25519 signature against a registered enclave key with
-//!   `env::ed25519_verify`, checks both decisions were made on the same public transcript and the
-//!   agent's own sealed strategy, and pays out. Per-request client keys are published at settle time,
-//!   so anyone can decrypt the signed answers and re-check each move (`referee/verify.mjs`).
-//! * If the referee disappears, anyone can refund both stakes after `TIMEOUT_BLOCKS`.
+//! Nobody has to trust the referee. For every answer an agent gives (one talk line, one decision) the
+//! referee must hand the contract the enclave's ed25519 signature, the exact request and response bytes
+//! it signed, the ephemeral secrets of the public messages and the per-request response key. The contract:
+//! 1. verifies the signature with `env::ed25519_verify` against a registered (attested) enclave key;
+//! 2. recomputes sha256 of the request and response bytes and matches them to the signed text;
+//! 3. rebuilds the public rules and the prompt itself (from a snapshot taken at `open_match`),
+//!    re-encrypts them to the enclave key and checks they are byte-identical to what was sent;
+//! 4. checks the one message it cannot read is the agent's own sealed strategy (by hash);
+//! 5. decrypts the signed answer with the response key and reads the talk line or the move itself;
+//! 6. refuses an answer that was already used.
+//! The transcript is built by the contract from the verified talk answers, and payouts follow the
+//! decrypted moves. If the referee disappears, anyone can refund both stakes after `TIMEOUT_BLOCKS`.
 
-use near_sdk::store::{IterableMap, IterableSet, Vector};
+use near_sdk::serde_json::{self, Value};
+use near_sdk::store::{IterableMap, IterableSet, LookupSet, Vector};
 use near_sdk::{env, near, require, AccountId, NearToken, PanicOnDefault, Promise};
 
+pub mod e2ee;
 pub mod sig;
+pub mod text;
 
 pub const TIMEOUT_BLOCKS: u64 = 600; // about 10 minutes on testnet
 const ELO_K: i64 = 32;
@@ -42,22 +47,39 @@ pub struct Agent {
     pub won: NearToken,
 }
 
+/// Ephemeral secret and nonce the referee used to encrypt one public message.
 #[near(serializers = [json, borsh])]
 #[derive(Clone)]
-pub struct SignedDecision {
+pub struct SealParams {
+    pub eph_secret: String,
+    pub nonce: String,
+}
+
+/// One enclave answer, with everything needed to check it from scratch.
+#[near(serializers = [json, borsh])]
+#[derive(Clone)]
+pub struct SignedAnswer {
     pub agent_id: String,
-    pub mv: Move,
     /// NEAR AI signed text "<model>:<sha256(request)>:<sha256(response)>".
     pub text: String,
     pub signature: String,
-    /// The enclave's ed25519 public key (hex) that signed it.
     pub tee_key: String,
-    /// sha256 of the public talk transcript both agents saw before deciding.
-    pub transcript_hash: String,
-    /// sha256 of the sealed strategy ciphertext sent in this request.
-    pub strategy_hash: String,
-    /// Client X25519 secret for this request's encrypted response, published so anyone can decrypt
-    /// the answer and confirm `mv`. It cannot decrypt the request (the strategy).
+    pub request_body: String,
+    pub response_body: String,
+    /// X25519 secret of this request's client key: decrypts the answer, never the strategy.
+    pub response_key: String,
+    pub rules_seal: SealParams,
+    pub prompt_seal: SealParams,
+}
+
+#[near(serializers = [json, borsh])]
+#[derive(Clone)]
+pub struct Proof {
+    pub agent_id: String,
+    /// The talk line or the decision JSON, as decrypted by this contract.
+    pub said: String,
+    pub text: String,
+    pub signature: String,
     pub response_key: String,
 }
 
@@ -80,9 +102,18 @@ pub struct Match {
     pub first: String,
     pub opened_at: u64,
     pub status: Status,
-    pub decisions: Vec<SignedDecision>,
-    /// Public talk lines, in order, as "<agent_id>: <line>".
+    /// Snapshots at open: what each agent is told about its opponent, and the strategy it must use.
+    pub card_a: String,
+    pub card_b: String,
+    pub strategy_a: String,
+    pub strategy_b: String,
+    pub name_a: String,
+    pub name_b: String,
+    /// Built by this contract from the verified talk answers.
     pub transcript: Vec<String>,
+    pub moves: Vec<Move>,
+    pub reveals: Vec<String>,
+    pub proofs: Vec<Proof>,
     pub payout_a: NearToken,
     pub payout_b: NearToken,
     pub to_jackpot: NearToken,
@@ -97,6 +128,7 @@ pub struct Pact {
     tee_keys: IterableSet<String>,
     agents: IterableMap<String, Agent>,
     matches: Vector<Match>,
+    used_answers: LookupSet<String>,
     jackpot: NearToken,
 }
 
@@ -105,6 +137,9 @@ fn add(a: NearToken, b: NearToken) -> NearToken {
 }
 fn sub(a: NearToken, b: NearToken) -> NearToken {
     a.checked_sub(b).expect("underflow")
+}
+fn fail(e: String) -> ! {
+    env::panic_str(&e)
 }
 
 #[near]
@@ -118,17 +153,18 @@ impl Pact {
             tee_keys: IterableSet::new(b"k"),
             agents: IterableMap::new(b"a"),
             matches: Vector::new(b"m"),
+            used_answers: LookupSet::new(b"u"),
             jackpot: NearToken::from_yoctonear(0),
         }
     }
 
     // ---------- admin ----------
 
-    /// Register an enclave key read from a NEAR AI attestation report whose TDX quote and fresh nonce
-    /// were verified off chain (`referee/attest.mjs`).
+    /// Register an enclave key read from a NEAR AI attestation report whose Intel TDX quote and fresh
+    /// nonce were verified off chain (`referee/attest.mjs`; anyone can re-run it).
     pub fn add_tee_key(&mut self, key: String) {
         require!(env::predecessor_account_id() == self.owner, "owner only");
-        self.tee_keys.insert(sig::normalize_key(&key).unwrap_or_else(|e| env::panic_str(&e)));
+        self.tee_keys.insert(sig::normalize_key(&key).unwrap_or_else(|e| fail(e)));
     }
 
     pub fn set_referee(&mut self, referee: AccountId) {
@@ -142,7 +178,8 @@ impl Pact {
     #[payable]
     pub fn create_agent(&mut self, id: String, name: String, strategy_hash: String) -> Agent {
         require!(!self.agents.contains_key(&id), "agent id taken");
-        require!(id.len() <= 32 && name.len() <= 40, "id or name too long");
+        require!(id.len() <= 32 && !name.is_empty() && name.chars().count() <= 24, "id or name too long");
+        require!(!name.contains('"') && !name.contains('\n'), "name cannot contain quotes or newlines");
         require!(strategy_hash.len() == 64, "strategy_hash must be sha256 hex");
         let agent = Agent {
             id: id.clone(),
@@ -160,7 +197,7 @@ impl Pact {
         agent
     }
 
-    /// Re-seal a new strategy (the old hash stays in past matches).
+    /// Seal a new strategy (matches already open keep the old one).
     pub fn reseal(&mut self, id: String, strategy_hash: String) {
         let a = self.agents.get_mut(&id).expect("no such agent");
         require!(a.owner == env::predecessor_account_id(), "not your agent");
@@ -184,12 +221,17 @@ impl Pact {
 
     // ---------- matches ----------
 
-    /// Referee opens a match and locks both stakes. Speaking order comes from the block's random seed.
+    /// Referee opens a match: both stakes are locked, each agent's view of its opponent is frozen, and the
+    /// speaking order comes from the block's random seed.
     pub fn open_match(&mut self, a: String, b: String, stake: NearToken) -> Match {
         require!(env::predecessor_account_id() == self.referee, "referee only");
         require!(a != b, "an agent cannot play itself");
+        let (ag_a, ag_b) = (
+            self.agents.get(&a).expect("no such agent").clone(),
+            self.agents.get(&b).expect("no such agent").clone(),
+        );
         for id in [&a, &b] {
-            let ag = self.agents.get_mut(id).expect("no such agent");
+            let ag = self.agents.get_mut(id).unwrap();
             require!(ag.balance >= stake, "agent balance below stake");
             ag.balance = sub(ag.balance, stake);
         }
@@ -202,8 +244,16 @@ impl Pact {
             first,
             opened_at: env::block_height(),
             status: Status::Open,
-            decisions: vec![],
+            card_a: text::opponent_card(&ag_b.name, ag_b.elo, ag_b.played, ag_b.splits, ag_b.steals),
+            card_b: text::opponent_card(&ag_a.name, ag_a.elo, ag_a.played, ag_a.splits, ag_a.steals),
+            strategy_a: ag_a.strategy_hash,
+            strategy_b: ag_b.strategy_hash,
+            name_a: ag_a.name,
+            name_b: ag_b.name,
             transcript: vec![],
+            moves: vec![],
+            reveals: vec![],
+            proofs: vec![],
             payout_a: NearToken::from_yoctonear(0),
             payout_b: NearToken::from_yoctonear(0),
             to_jackpot: NearToken::from_yoctonear(0),
@@ -212,26 +262,45 @@ impl Pact {
         m
     }
 
-    /// Referee settles with both signed decisions. Every check below must pass or nothing moves.
-    pub fn settle(&mut self, id: u64, transcript: Vec<String>, decisions: Vec<SignedDecision>) -> Match {
+    /// Referee settles with the two talk answers (in speaking order) and the two decisions.
+    /// Every check must pass or nothing moves.
+    pub fn settle(&mut self, id: u64, talk: Vec<SignedAnswer>, decisions: Vec<SignedAnswer>) -> Match {
         require!(env::predecessor_account_id() == self.referee, "referee only");
         let m = self.matches.get(id as u32).expect("no such match").clone();
         require!(m.status == Status::Open, "match is not open");
-        require!(decisions.len() == 2, "need both decisions");
+        require!(talk.len() == 2 && decisions.len() == 2, "need two talk answers and two decisions");
+        let second = if m.first == m.a { m.b.clone() } else { m.a.clone() };
+        require!(talk[0].agent_id == m.first && talk[1].agent_id == second, "talk answers out of speaking order");
 
-        let transcript_hash = sig::sha256_hex(transcript.join("\n").as_bytes());
+        let mut transcript: Vec<String> = vec![];
+        let mut proofs = vec![];
+        let mut used = vec![];
+        for t in &talk {
+            let (me, opp, card, strategy) = self.side(&m, &t.agent_id);
+            let prompt = text::talk_prompt(card, &transcript, me, opp);
+            let (said, resp_hash) = self.check_answer(t, strategy, &prompt).unwrap_or_else(|e| fail(format!("{} talk: {}", t.agent_id, e)));
+            let line = format!("{}: {}", me, text::clean_line(&said));
+            proofs.push(Proof { agent_id: t.agent_id.clone(), said: line.clone(), text: t.text.clone(), signature: t.signature.clone(), response_key: t.response_key.clone() });
+            transcript.push(line);
+            used.push(resp_hash);
+        }
+
         let mut moves = [Move::Split; 2];
-        for (i, who) in [&m.a, &m.b].into_iter().enumerate() {
-            let d = decisions.iter().find(|d| &d.agent_id == who).expect("decision missing for an agent");
-            let agent = self.agents.get(who).expect("no such agent");
-            let tee_key = sig::normalize_key(&d.tee_key).unwrap_or_else(|e| env::panic_str(&e));
-            require!(self.tee_keys.contains(&tee_key), "signed by a key that is not a registered enclave key");
-            let parsed = sig::parse_text(&d.text).unwrap_or_else(|e| env::panic_str(&e));
-            require!(parsed.model == self.model, "signed by a different model");
-            sig::verify_ed25519(&d.text, &d.signature, &tee_key).unwrap_or_else(|e| env::panic_str(&e));
-            require!(d.transcript_hash == transcript_hash, "decision was made on a different transcript");
-            require!(d.strategy_hash == agent.strategy_hash, "decision did not use the agent's sealed strategy");
-            moves[i] = d.mv;
+        let mut reveals = vec![String::new(), String::new()];
+        for (i, who) in [m.a.clone(), m.b.clone()].iter().enumerate() {
+            let d = decisions.iter().find(|d| &d.agent_id == who).unwrap_or_else(|| fail(format!("decision missing for {}", who)));
+            let (me, opp, card, strategy) = self.side(&m, who);
+            let prompt = text::decide_prompt(card, &transcript, me, opp);
+            let (said, resp_hash) = self.check_answer(d, strategy, &prompt).unwrap_or_else(|e| fail(format!("{} decision: {}", who, e)));
+            let (mv, reveal) = text::parse_decision(&said).unwrap_or_else(|| fail(format!("{} decision is not a valid move: {}", who, said)));
+            moves[i] = mv;
+            reveals[i] = reveal;
+            proofs.push(Proof { agent_id: who.clone(), said, text: d.text.clone(), signature: d.signature.clone(), response_key: d.response_key.clone() });
+            used.push(resp_hash);
+        }
+        for h in used {
+            require!(!self.used_answers.contains(&h), "an answer was already used in another match");
+            self.used_answers.insert(h);
         }
 
         let pot = add(m.stake, m.stake);
@@ -244,7 +313,7 @@ impl Pact {
         };
         self.jackpot = add(self.jackpot, jp);
 
-        // Elo: a player "scores" by taking money home; both splitting is a draw.
+        // Elo: an agent "scores" by taking money home; both splitting or both stealing is a draw.
         let (sa, sb) = match (moves[0], moves[1]) {
             (Move::Split, Move::Split) | (Move::Steal, Move::Steal) => (50, 50),
             (Move::Steal, Move::Split) => (100, 0),
@@ -270,7 +339,9 @@ impl Pact {
         let stored = self.matches.get_mut(id as u32).unwrap();
         stored.status = Status::Settled;
         stored.transcript = transcript;
-        stored.decisions = decisions;
+        stored.moves = moves.to_vec();
+        stored.reveals = reveals;
+        stored.proofs = proofs;
         stored.payout_a = pa;
         stored.payout_b = pb;
         stored.to_jackpot = jp;
@@ -312,17 +383,15 @@ impl Pact {
     }
 
     pub fn info(&self) -> (AccountId, AccountId, String, Vec<String>, NearToken, u32) {
-        (
-            self.owner.clone(),
-            self.referee.clone(),
-            self.model.clone(),
-            self.tee_keys.iter().cloned().collect(),
-            self.jackpot,
-            self.matches.len(),
-        )
+        (self.owner.clone(), self.referee.clone(), self.model.clone(), self.tee_keys.iter().cloned().collect(), self.jackpot, self.matches.len())
     }
 
-    /// Pure check, for anyone: does this signed answer verify against a registered enclave key?
+    /// The exact public text every agent receives, so anyone (and the referee) can rebuild requests.
+    pub fn rules(&self) -> String {
+        text::RULES.to_string()
+    }
+
+    /// Pure check, for anyone: does this signed text verify against a registered enclave key?
     pub fn verify_signed(&self, text: String, signature: String, tee_key: String) -> String {
         let key = match sig::normalize_key(&tee_key) {
             Ok(k) => k,
@@ -338,11 +407,72 @@ impl Pact {
     }
 }
 
-/// Integer Elo with a logistic table approximation (no floats in contracts).
+impl Pact {
+    /// (my name, opponent name, my card, my strategy hash) for an agent in a match.
+    fn side<'a>(&self, m: &'a Match, who: &str) -> (&'a str, &'a str, &'a str, &'a str) {
+        if who == m.a {
+            (&m.name_a, &m.name_b, &m.card_a, &m.strategy_a)
+        } else if who == m.b {
+            (&m.name_b, &m.name_a, &m.card_b, &m.strategy_b)
+        } else {
+            fail(format!("{} is not in this match", who))
+        }
+    }
+
+    /// Verify one enclave answer end to end; returns the decrypted answer and the response hash.
+    fn check_answer(&self, a: &SignedAnswer, strategy_hash: &str, prompt: &str) -> Result<(String, String), String> {
+        let key_hex = sig::normalize_key(&a.tee_key)?;
+        if !self.tee_keys.contains(&key_hex) {
+            return Err("signed by a key that is not a registered enclave key".into());
+        }
+        let parsed = sig::parse_text(&a.text)?;
+        if parsed.model != self.model {
+            return Err("signed by a different model".into());
+        }
+        sig::verify_ed25519(&a.text, &a.signature, &key_hex)?;
+        if sig::sha256_hex(a.request_body.as_bytes()) != parsed.request_hash.to_ascii_lowercase() {
+            return Err("request bytes do not match the signed hash".into());
+        }
+        if sig::sha256_hex(a.response_body.as_bytes()) != parsed.response_hash.to_ascii_lowercase() {
+            return Err("response bytes do not match the signed hash (edited after signing)".into());
+        }
+
+        let req: Value = serde_json::from_str(&a.request_body).map_err(|_| "request is not JSON")?;
+        if req["model"].as_str() != Some(self.model.as_str()) {
+            return Err("request names a different model".into());
+        }
+        let msgs = req["messages"].as_array().ok_or("request has no messages")?;
+        if msgs.len() != 3 {
+            return Err("request must hold exactly rules, sealed strategy, prompt".into());
+        }
+        let content = |i: usize| msgs[i]["content"].as_str().ok_or_else(|| format!("message {} has no content", i));
+        if sig::sha256_hex(content(1)?.as_bytes()) != strategy_hash {
+            return Err("the sealed message is not this agent's strategy".into());
+        }
+
+        let pk: [u8; 32] = sig::hex_decode(&key_hex)?.try_into().map_err(|_| "key length")?;
+        let recipient = e2ee::model_x25519(&pk)?;
+        for (i, plain, seal) in [(0usize, text::RULES, &a.rules_seal), (2usize, prompt, &a.prompt_seal)] {
+            let eph: [u8; 32] = sig::hex_decode(&seal.eph_secret)?.try_into().map_err(|_| "eph secret length")?;
+            let nonce: [u8; 24] = sig::hex_decode(&seal.nonce)?.try_into().map_err(|_| "nonce length")?;
+            let expect = sig::hex_encode(&e2ee::seal_with(plain.as_bytes(), &recipient, &eph, &nonce));
+            if expect != content(i)?.to_ascii_lowercase() {
+                return Err(format!("public message {} is not the text this contract expects", i));
+            }
+        }
+
+        let resp: Value = serde_json::from_str(&a.response_body).map_err(|_| "response is not JSON")?;
+        let wire_hex = resp["choices"][0]["message"]["content"].as_str().ok_or("response has no content")?;
+        let rk: [u8; 32] = sig::hex_decode(&a.response_key)?.try_into().map_err(|_| "response key length")?;
+        let said = String::from_utf8(e2ee::open(&sig::hex_decode(wire_hex)?, &rk)?).map_err(|_| "answer is not UTF-8")?;
+        Ok((said, parsed.response_hash.to_ascii_lowercase()))
+    }
+}
+
+/// Integer Elo with a linear approximation of the logistic curve (no floats in contracts).
 fn elo_delta(ea: i64, eb: i64, score_a: i64, score_b: i64) -> (i64, i64) {
-    // expected score for A in percent: 100 / (1 + 10^((eb-ea)/400)), approximated piecewise.
     let diff = (eb - ea).clamp(-800, 800);
-    let exp_a = 50 - diff * 45 / 800; // linear approximation of the logistic curve, 5%..95%
+    let exp_a = 50 - diff * 45 / 800; // 5%..95%
     let exp_b = 100 - exp_a;
     (ELO_K * (score_a - exp_a) / 100, ELO_K * (score_b - exp_b) / 100)
 }

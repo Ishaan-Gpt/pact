@@ -7,7 +7,7 @@ import { Near } from "near-kit";
 
 export const cfg = {
   network: process.env.NEAR_NETWORK || "testnet",
-  contract: process.env.PACT_CONTRACT || "pact-arena.testnet",
+  contract: process.env.PACT_CONTRACT || "game.pact-arena.testnet",
   referee: process.env.PACT_REFEREE || "pact-arena.testnet",
   model: process.env.PACT_MODEL || "z-ai/glm-5.3-flash",
   apiKey: process.env.NEARAI_API_KEY,
@@ -30,9 +30,11 @@ export async function nearView(method, args = {}) {
   return near().view(cfg.contract, method, args);
 }
 
+export const lastGas = { tgas: 0 };
 /** Sends a function call and returns the method's decoded return value (near-kit returns the raw outcome). */
 export async function nearCall(contract, method, args = {}, opts = {}) {
   const res = await near().call(contract, method, args, { gas: opts.gas || "300 Tgas", attachedDeposit: opts.deposit || "0 NEAR", signerId: cfg.referee });
+  lastGas.tgas = ((res?.transaction_outcome?.outcome?.gas_burnt ?? 0) + (res?.receipts_outcome ?? []).reduce((a, r) => a + (r.outcome?.gas_burnt ?? 0), 0)) / 1e12;
   const sv = res?.status?.SuccessValue;
   if (sv === undefined) throw new Error(`${method} failed: ${JSON.stringify(res?.status).slice(0, 300)}`);
   if (!sv) return null;

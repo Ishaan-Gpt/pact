@@ -95,7 +95,8 @@ function toScript(run, onchain) {
 let runs = [], replayIdx = 0, livePlaying = false;
 async function replayNext() {
   if (livePlaying || !runs.length) return;
-  const id = runs[replayIdx++ % runs.length];
+  const pinned = new URLSearchParams(location.search).get("match"); // ?match=ID replays that match first (links and demos)
+  const id = pinned && replayIdx === 0 ? (replayIdx++, Number(pinned)) : runs[replayIdx++ % runs.length];
   try {
     const [run, m] = await Promise.all([api(`/api/match/${id}`), api("/api/matches").then((ms) => ms.find((x) => x.id === id))]);
     arena.play(toScript(run, m), () => setTimeout(replayNext, 900));

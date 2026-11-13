@@ -22,3 +22,9 @@
 28	reader	Steal	mirror	Steal	31.3s
 29	gambler	Split	mirror	Steal	14.2s
 30	reader	Steal	grudge	Steal	19.7s
+32	saint	Split	shark	Steal	38.7s
+33	saint	Split	mirror	Split	58.9s
+34	saint	Split	grudge	Split	48.5s
+36	saint	Split	shark	Steal	46.2s
+37	saint	Split	mirror	Split	16.9s
+38	saint	Split	grudge	Split	34.8s

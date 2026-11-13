@@ -1,0 +1,4 @@
+1
+00:00:00,050 --> 00:00:12,734
+We tried to cheat it ourselves by flipping a move after it was signed and by showing the two agents different conversations, and the contract refused both, while every match our referee abandoned halfway was refunded on chain, down to the last coin.
+

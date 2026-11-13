@@ -1,112 +1,100 @@
-// Run one Pact match end to end: open on chain, one sealed talk turn per agent, two sealed decisions,
-// settle on chain with the enclave's signatures, and save every byte needed to audit it.
+// Run one Pact match end to end: open on chain, one sealed talk turn per agent (in the contract's order),
+// two sealed decisions, then settle. The contract re-checks every answer itself (signature, request and
+// response bytes, public messages, sealed strategy) and decrypts the talk lines and moves on chain.
 // Usage: node match.mjs <agentA> <agentB> [stakeNEAR]
 import { writeFileSync, mkdirSync } from "node:fs";
-import { cfg, nearView, nearCall } from "./lib/near.mjs";
+import { cfg, nearView, nearCall, lastGas } from "./lib/near.mjs";
 import { seal, sha256Hex } from "./lib/e2ee.mjs";
 import { sealedChat } from "./lib/nearai.mjs";
-import { rules, talkPrompt, decidePrompt, parseDecision, cleanLine } from "./lib/game.mjs";
+import { RULES, talkPrompt, decidePrompt, parseDecision, cleanLine } from "./lib/game.mjs";
 import { getSealed } from "./lib/store.mjs";
 
 const yocto = (near) => (BigInt(Math.round(Number(near) * 1e6)) * 10n ** 18n).toString();
 const toNear = (y) => Number(BigInt(y) / 10n ** 18n) / 1e6;
 
-export async function runMatch(aId, bId, stakeNear = 1, onEvent = () => {}) {
-  const [info, A, B] = await Promise.all([nearView("info"), nearView("get_agent", { id: aId }), nearView("get_agent", { id: bId })]);
+export async function runMatch(aId, bId, stakeNear = 0.05, onEvent = () => {}) {
+  const info = await nearView("info");
   const modelKey = info[3].at(-1);
-  if (!A || !B) throw new Error("unknown agent");
   const sealed = { [aId]: getSealed(aId), [bId]: getSealed(bId) };
-  for (const ag of [A, B]) {
-    if (sha256Hex(sealed[ag.id].wire) !== ag.strategy_hash) throw new Error(`stored strategy for ${ag.id} does not match its on-chain hash`);
+  for (const id of [aId, bId]) {
+    const ag = await nearView("get_agent", { id });
+    if (!ag) throw new Error(`unknown agent ${id}`);
+    if (sha256Hex(sealed[id].wire) !== ag.strategy_hash) throw new Error(`stored strategy for ${id} does not match its on-chain hash`);
   }
 
-  const opened = await nearCall(cfg.contract, "open_match", { a: aId, b: bId, stake: yocto(stakeNear) });
-  const m = opened;
+  const m = await nearCall(cfg.contract, "open_match", { a: aId, b: bId, stake: yocto(stakeNear) });
   onEvent({ type: "open", match: m });
-  const pot = stakeNear * 2;
-  const rulesText = rules({ stake: stakeNear, pot });
-  const log = { match_id: m.id, contract: cfg.contract, model: cfg.model, model_key: modelKey, stake: stakeNear, calls: [] };
+  const side = (id) => (id === m.a ? { me: m.name_a, opp: m.name_b, card: m.card_a } : { me: m.name_b, opp: m.name_a, card: m.card_b });
 
-  // Build a request: public messages are sealed with published ephemeral secrets; the strategy is the owner's own seal.
-  const ask = async (ag, opp, prompt, kind) => {
-    const pub1 = seal(rulesText, modelKey);
-    const pub2 = seal(prompt, modelKey);
-    const messages = [
-      { role: "system", content: pub1.wire },
-      { role: "user", content: sealed[ag.id].wire },
-      { role: "user", content: pub2.wire },
-    ];
-    let r, lastErr;
-    for (let i = 0; i < 3 && !r; i++) {
+  // One enclave answer with its full proof. Public messages are sealed with secrets we publish.
+  const ask = async (agent, prompt, kind, accept) => {
+    let lastErr;
+    for (let i = 0; i < 4; i++) {
       try {
-        r = await sealedChat({ messages, modelKey, maxTokens: kind === "decide" ? 900 : 500 });
-        if (!r.content.trim()) (lastErr = new Error("empty answer")), (r = null);
+        const r = seal(RULES, modelKey), p = seal(prompt, modelKey);
+        const messages = [
+          { role: "system", content: r.wire },
+          { role: "user", content: sealed[agent].wire },
+          { role: "user", content: p.wire },
+        ];
+        const res = await sealedChat({ messages, modelKey, maxTokens: kind === "decide" ? 900 : 500 });
+        const bad = Object.entries(res.checks).filter(([, v]) => !v).map(([k]) => k);
+        if (bad.length) throw new Error(`enclave proof failed: ${bad.join(", ")}`);
+        if (!accept(res.content)) throw new Error(`unusable ${kind} answer: ${res.content.slice(0, 80)}`);
+        return {
+          content: res.content,
+          answer: {
+            agent_id: agent, text: res.signature.text, signature: res.signature.signature.replace(/^0x/, ""), tee_key: modelKey,
+            request_body: res.requestBody, response_body: res.responseBody, response_key: res.responseKey,
+            rules_seal: { eph_secret: r.ephSecret, nonce: r.nonce }, prompt_seal: { eph_secret: p.ephSecret, nonce: p.nonce },
+          },
+        };
       } catch (e) {
         lastErr = e;
         await new Promise((s) => setTimeout(s, 1500 * (i + 1)));
       }
     }
-    if (!r) throw lastErr;
-    const bad = Object.entries(r.checks).filter(([, v]) => !v).map(([k]) => k);
-    if (bad.length) throw new Error(`enclave proof failed for ${ag.id} ${kind}: ${bad.join(", ")}`);
-    log.calls.push({
-      agent: ag.id, kind, chat_id: r.chatId, request_body: r.requestBody, response_body: r.responseBody,
-      response_key: r.responseKey, signature: r.signature,
-      public_messages: [{ index: 0, plaintext: rulesText, eph_secret: pub1.ephSecret, nonce: pub1.nonce },
-                        { index: 2, plaintext: prompt, eph_secret: pub2.ephSecret, nonce: pub2.nonce }],
-      sealed_strategy_index: 1, answer: r.content,
-    });
-    return r;
+    throw lastErr;
   };
 
-  const order = m.first === aId ? [[A, B], [B, A]] : [[B, A], [A, B]];
-  const transcript = [];
-  for (const [me, opp] of order) {
-    const r = await ask(me, opp, talkPrompt({ me, opp, transcript: [...transcript] }), "talk");
-    const line = `${me.name}: ${cleanLine(r.content)}`;
+  const order = m.first === m.a ? [m.a, m.b] : [m.b, m.a];
+  const transcript = [], talk = [];
+  for (const id of order) {
+    const s = side(id);
+    const { content, answer } = await ask(id, talkPrompt({ card: s.card, transcript: [...transcript], me: s.me, opp: s.opp }), "talk", (c) => c.trim().length > 0);
+    const line = `${s.me}: ${cleanLine(content)}`;
     transcript.push(line);
-    onEvent({ type: "talk", agent: me.id, line });
+    talk.push(answer);
+    onEvent({ type: "talk", agent: id, line });
   }
 
-  const transcriptHash = sha256Hex(transcript.join("\n"));
-  const decide = async (me, opp) => {
-    for (let tries = 0; tries < 3; tries++) {
-      const r = await ask(me, opp, decidePrompt({ me, opp, transcript }), "decide");
-      const d = parseDecision(r.content);
-      if (d) {
-        return {
-          reveal: d.reveal,
-          decision: {
-            agent_id: me.id, mv: d.mv, text: r.signature.text, signature: r.signature.signature.replace(/^0x/, ""),
-            tee_key: modelKey, transcript_hash: transcriptHash, strategy_hash: me.strategy_hash, response_key: r.responseKey,
-          },
-        };
-      }
-    }
-    throw new Error(`${me.id} gave no valid decision`);
-  };
   // Both decide from the same transcript, in parallel: neither sees the other's choice.
-  const [da, db] = await Promise.all([decide(A, B), decide(B, A)]);
+  const decide = (id) => ask(id, decidePrompt({ card: side(id).card, transcript, me: side(id).me }), "decide", (c) => !!parseDecision(c));
+  const [da, db] = await Promise.all([decide(m.a), decide(m.b)]);
   onEvent({ type: "decided" });
 
-  const settleArgs = { id: m.id, transcript, decisions: [da.decision, db.decision] };
+  const settleArgs = { id: m.id, talk, decisions: [da.answer, db.answer] };
   mkdirSync("runs", { recursive: true });
-  writeFileSync(`runs/pending-${m.id}.json`, JSON.stringify({ settleArgs, log, transcript }, null, 1));
-  const settled = await nearCall(cfg.contract, "settle", settleArgs);
+  writeFileSync(`runs/pending-${m.id}.json`, JSON.stringify(settleArgs));
+  const settled = await nearCall(cfg.contract, "settle", settleArgs, { gas: "300 Tgas" });
+  const settleGas = lastGas.tgas;
+
   const result = {
-    ...log, transcript, transcript_hash: transcriptHash,
-    reveals: { [aId]: da.reveal, [bId]: db.reveal },
-    moves: { [aId]: da.decision.mv, [bId]: db.decision.mv },
-    payout: { [aId]: toNear(settled.payout_a), [bId]: toNear(settled.payout_b), jackpot: toNear(settled.to_jackpot) },
+    match_id: m.id, contract: cfg.contract, model: cfg.model, model_key: modelKey, stake: stakeNear,
+    transcript: settled.transcript,
+    moves: { [m.a]: settled.moves[0], [m.b]: settled.moves[1] },
+    reveals: { [m.a]: settled.reveals[0], [m.b]: settled.reveals[1] },
+    payout: { [m.a]: toNear(settled.payout_a), [m.b]: toNear(settled.payout_b), jackpot: toNear(settled.to_jackpot) },
+    settle_gas_tgas: settleGas,
+    talk, decisions: settleArgs.decisions,
   };
-  mkdirSync("runs", { recursive: true });
   writeFileSync(`runs/match-${m.id}.json`, JSON.stringify(result, null, 1));
   onEvent({ type: "settled", result });
   return result;
 }
 
 if (process.argv[1].endsWith("match.mjs")) {
-  const [a, b, stake = "1"] = process.argv.slice(2);
+  const [a, b, stake = "0.05"] = process.argv.slice(2);
   const r = await runMatch(a, b, Number(stake), (e) => e.type === "talk" && console.log(e.line));
   console.log(`\n${a}: ${r.moves[a]}  "${r.reveals[a]}"\n${b}: ${r.moves[b]}  "${r.reveals[b]}"`);
   console.log("payout", r.payout, `\nsettled on chain: match ${r.match_id} at ${cfg.contract}`);

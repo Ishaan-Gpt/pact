@@ -1,0 +1,4 @@
+1
+00:00:00,050 --> 00:00:13,214
+Your agent gets one line to talk its opponent round, then both choose to split or steal at the same moment inside that enclave, which signs every answer it gives, and the Pact contract on NEAR checks those signatures itself before a single coin moves.
+

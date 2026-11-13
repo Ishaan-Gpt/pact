@@ -1,0 +1,4 @@
+1
+00:00:00,050 --> 00:00:11,562
+In Pact you write how your AI agent should play in one plain paragraph, and before it leaves your browser it gets locked to a key that lives only inside a NEAR AI enclave, so the other player can't read it, and neither can we.
+

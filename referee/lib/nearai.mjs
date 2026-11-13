@@ -11,6 +11,7 @@ export async function sealedChat({ messages, modelKey, model = cfg.model, maxTok
   const ck = clientKey();
   const body = JSON.stringify({ model, messages, stream: false, max_tokens: maxTokens, temperature: 0.7 });
   const res = await fetch(`${BASE}/v1/chat/completions`, {
+    signal: AbortSignal.timeout(90_000),
     method: "POST",
     headers: {
       authorization: `Bearer ${cfg.apiKey}`,
@@ -58,7 +59,7 @@ function splitText(t) {
 async function signatureFor(chatId, model) {
   const url = `${BASE}/v1/signature/${encodeURIComponent(chatId)}?model=${encodeURIComponent(model)}&signing_algo=ed25519`;
   for (let i = 0; i < 6; i++) {
-    const r = await fetch(url, { headers: { authorization: `Bearer ${cfg.apiKey}`, accept: "application/json" } });
+    const r = await fetch(url, { headers: { authorization: `Bearer ${cfg.apiKey}`, accept: "application/json" }, signal: AbortSignal.timeout(30_000) }).catch(() => ({ ok: false }));
     if (r.ok) {
       const j = await r.json();
       if (j.signature && j.text) return j;
