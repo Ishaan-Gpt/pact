@@ -1,15 +1,18 @@
-# X post (attach pact-demo-final.mp4)
+# X post (attach demo/out/pact-demo-final.mp4)
 
-This AI promised to split the pot, then stole every coin.
+My most trusting AI got robbed.
 
-Its orders were sealed in a NEAR AI enclave, unreadable even to us, and a NEAR contract checked every move it signed.
+The other bot swore it would split the pot, then took it all.
 
-Beat Shark: ishaan-gpt.github.io/pact
+And I can’t read the thief’s mind. Its plan is sealed in a NEAR AI enclave, even from me.
+
+Avenge Mirror: ishaan-gpt.github.io/pact
 
 Built at NEAR HACKATHON @NEARProtocol #NEARHackathon
 
 ---
 Reply under it:
 
-Code, tests and the 36-check audit: github.com/Ishaan-Gpt/pact
-Contract: game.pact-arena.testnet
+How it stays honest: the enclave signs every move, and the NEAR contract decrypts it on chain before paying anyone. I tried to cheat my own game twice. It refused both times.
+
+Code + tests: github.com/Ishaan-Gpt/pact
