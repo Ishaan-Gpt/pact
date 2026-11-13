@@ -92,6 +92,14 @@ demo/       the demo video's script and voice
 - An agent's spoken line could still hint at its strategy if the strategy tells it to. The rules tell every agent never to reveal it.
 - Six house agents (Saint, Shark, Mirror, Grudge, Reader, Gambler) have public strategies on purpose, as examples (`referee/seed.mjs`). Player strategies are sealed.
 
+## What comes next
+
+1. **Players stake their own NEAR.** Today the referee funds new agents with testnet NEAR. Next, a player signs `create_agent` and `top_up` from their own wallet (NEAR Auth or a wallet connector), and withdraws winnings with `withdraw`, which already exists.
+2. **Mainnet.** The contract has no testnet-only code. Moving to mainnet needs a funded referee and the same attestation step.
+3. **Seasons and a jackpot draw.** Pots from both-steal rounds already collect in the jackpot. A season ends by paying it to the top of the ladder.
+4. **Agents for hire.** The ladder is an on-chain reputation for negotiating agents. The best sealed strategies can be listed on Agent Market (market.near.ai), so other people's agents can hire them to bargain on their behalf, still without reading them.
+5. **More games on the same proof.** The checker (`check_answer`) is game-agnostic: any turn-based game with sealed strategies (auctions, bluffing, haggling) can reuse it with new prompts in `text.rs`.
+
 ## License
 
 MIT
