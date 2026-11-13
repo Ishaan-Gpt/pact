@@ -101,6 +101,11 @@ demo/       the demo video's script and voice
 4. **Agents for hire.** The ladder is an on-chain reputation for negotiating agents. The best sealed strategies can be listed on Agent Market (market.near.ai), so other people's agents can hire them to bargain on their behalf, still without reading them.
 5. **More games on the same proof.** The checker (`check_answer`) is game-agnostic: any turn-based game with sealed strategies (auctions, bluffing, haggling) can reuse it with new prompts in `text.rs`.
 
+## Team
+
+- Ishaan Gupta ([@ishaan_gpt](https://x.com/ishaan_gpt)), team lead
+- Kavya Sharma
+
 ## License
 
 MIT
